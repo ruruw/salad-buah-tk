@@ -1,0 +1,1426 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Membuat Salad Buah Yummy!</title>
+    
+    <!-- Tailwind CSS untuk Styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Tone.js untuk Musik & Efek Suara -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+    
+    <!-- Google Fonts: Fredoka untuk kesan ceria anak-anak -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Fredoka', sans-serif;
+            background-color: #fdf2f8;
+            user-select: none;
+        }
+
+        /* Slide Transitions */
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+            transform: scale(0.95);
+            display: flex;
+            flex-direction: column;
+        }
+        .slide.active {
+            opacity: 1;
+            pointer-events: auto;
+            transform: scale(1);
+        }
+
+        /* Custom Animations */
+        @keyframes bounce-slow {
+            0%, 100% { transform: translateY(-6%); }
+            50% { transform: translateY(6%); }
+        }
+        .animate-bounce-slow {
+            animation: bounce-slow 3s infinite ease-in-out;
+        }
+
+        @keyframes float-item {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(2deg); }
+        }
+        .animate-float {
+            animation: float-item 2.5s infinite ease-in-out;
+        }
+
+        /* Kitchen Stage Animations */
+        @keyframes knife-chop {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(-15px, 35px) rotate(-28deg); }
+        }
+        .anim-chop {
+            animation: knife-chop 0.35s infinite ease-in-out;
+        }
+
+        @keyframes spoon-stir {
+            0% { transform: translate(-25px, 0px) rotate(-12deg); }
+            25% { transform: translate(0px, 8px) rotate(0deg); }
+            50% { transform: translate(25px, 0px) rotate(12deg); }
+            75% { transform: translate(0px, -6px) rotate(0deg); }
+            100% { transform: translate(-25px, 0px) rotate(-12deg); }
+        }
+        .anim-stir {
+            animation: spoon-stir 0.55s infinite linear;
+        }
+
+        @keyframes lemon-press {
+            0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
+            50% { transform: translateY(14px) rotate(15deg) scale(1.08, 0.88); }
+        }
+        .anim-press {
+            animation: lemon-press 0.45s infinite ease-in-out;
+        }
+
+        @keyframes cheese-rub {
+            0%, 100% { transform: translate(-12px, -10px) rotate(-15deg); }
+            50% { transform: translate(12px, 14px) rotate(-15deg); }
+        }
+        .anim-rub-cheese {
+            animation: cheese-rub 0.35s infinite ease-in-out;
+        }
+
+        @keyframes drop-fall {
+            0% { transform: translateY(-30px) scale(0.5); opacity: 0; }
+            30% { opacity: 1; transform: translateY(0px) scale(1); }
+            100% { transform: translateY(75px) scale(0.8); opacity: 0; }
+        }
+        .anim-drop {
+            animation: drop-fall 0.8s infinite ease-in;
+        }
+
+        @keyframes ladle-scoop {
+            0% { transform: translate(-90px, 10px) rotate(-20deg); }
+            45% { transform: translate(-20px, -45px) rotate(10deg); }
+            75% { transform: translate(20px, -25px) rotate(45deg); }
+            100% { transform: translate(-90px, 10px) rotate(-20deg); }
+        }
+        .anim-ladle {
+            animation: ladle-scoop 1.4s infinite ease-in-out;
+        }
+
+        @keyframes pop-in {
+            0% { transform: scale(0); opacity: 0; }
+            70% { transform: scale(1.12); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .anim-pop {
+            animation: pop-in 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { filter: drop-shadow(0 0 8px rgba(250, 204, 21, 0.6)); transform: scale(1); }
+            50% { filter: drop-shadow(0 0 22px rgba(244, 114, 182, 0.9)); transform: scale(1.05); }
+        }
+        .anim-glow {
+            animation: pulse-glow 1.5s infinite ease-in-out;
+        }
+
+        .confetti {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+            opacity: 0;
+            z-index: 50;
+        }
+        @keyframes confetti-fall {
+            0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(450px) rotate(720deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body class="h-screen w-screen overflow-hidden flex flex-col">
+
+    <!-- Modal QR Code Remote untuk iPad -->
+    <div id="remote-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl p-6 max-w-sm w-full text-center shadow-2xl border-4 border-pink-300 animate-bounce-slow">
+            <div class="text-4xl mb-2">📱✨</div>
+            <h3 class="text-xl font-bold text-pink-600 mb-1">Hubungkan Remote iPhone</h3>
+            <p class="text-xs text-gray-600 mb-4 leading-relaxed">Buka kamera <b>iPhone</b> Anda lalu arahkan ke QR Code berikut untuk mengontrol slide tanpa kabel:</p>
+            
+            <div class="flex justify-center p-3 bg-pink-50 rounded-2xl border-2 border-dashed border-pink-300 mb-3 shadow-inner">
+                <div id="qrcode"></div>
+            </div>
+            
+            <div id="remote-host-status" class="text-xs font-semibold text-amber-700 bg-amber-100 py-1.5 px-3 rounded-full mb-4 inline-block">
+                🟡 Menunggu koneksi iPhone...
+            </div>
+            
+            <button onclick="closeRemoteModal()" class="w-full bg-gray-100 hover:bg-gray-200 active:bg-gray-300 text-gray-700 font-bold py-2.5 rounded-xl text-sm transition">
+                Tutup Jendela Ini
+            </button>
+        </div>
+    </div>
+
+    <!-- Tampilan Layar Remote Khusus untuk iPhone (?remote=...) -->
+    <div id="remote-controller-view" class="fixed inset-0 bg-gradient-to-b from-pink-100 via-white to-pink-100 z-50 p-6 hidden flex flex-col justify-between select-none">
+        <div class="text-center pt-2">
+            <span class="bg-pink-100 text-pink-600 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Remote Kontrol</span>
+            <h1 class="text-2xl font-black text-pink-600 mt-1">Salad Buah TK 🥗</h1>
+            <p class="text-xs text-gray-500">Ibu Dwi Yuniar Sari (Mama Shanum)</p>
+            <div id="remote-client-status" class="mt-2 inline-flex items-center gap-1.5 px-3 py-1 bg-amber-100 text-amber-800 text-xs font-bold rounded-full">
+                🟡 Menghubungkan ke iPad...
+            </div>
+        </div>
+
+        <div class="flex flex-col gap-4 my-auto max-w-sm mx-auto w-full">
+            <div class="grid grid-cols-2 gap-4">
+                <button onclick="sendRemote('prev')" class="bg-gradient-to-b from-sky-400 to-sky-500 active:from-sky-500 active:to-sky-600 text-white font-extrabold py-10 rounded-3xl shadow-xl text-xl flex flex-col items-center justify-center gap-2 active:scale-95 transition transform border-b-4 border-sky-600">
+                    <span class="text-4xl">⬅️</span>
+                    <span>Kembali</span>
+                </button>
+                <button onclick="sendRemote('next')" class="bg-gradient-to-b from-emerald-400 to-emerald-500 active:from-emerald-500 active:to-emerald-600 text-white font-extrabold py-10 rounded-3xl shadow-xl text-xl flex flex-col items-center justify-center gap-2 active:scale-95 transition transform border-b-4 border-emerald-600">
+                    <span class="text-4xl">➡️</span>
+                    <span>Lanjut</span>
+                </button>
+            </div>
+
+            <button onclick="sendRemote('music')" class="w-full bg-gradient-to-r from-yellow-300 to-amber-400 active:from-yellow-400 active:to-amber-500 text-amber-950 font-bold py-4 px-6 rounded-2xl shadow-lg text-base flex items-center justify-center gap-2 active:scale-95 transition transform border-b-4 border-amber-500">
+                🎵 Putar / Matikan Musik
+            </button>
+
+            <button onclick="sendRemote('step')" class="w-full bg-gradient-to-r from-pink-400 to-rose-400 active:from-pink-500 active:to-rose-500 text-white font-bold py-3.5 px-6 rounded-2xl shadow-lg text-sm flex items-center justify-center gap-2 active:scale-95 transition transform border-b-4 border-rose-500">
+                ✨ Lanjut Langkah Memasak
+            </button>
+        </div>
+
+        <div class="text-center pb-2 text-xs text-gray-400">
+            Terhubung otomatis via WebRTC (PeerJS)
+        </div>
+    </div>
+
+            <!-- Pemutar Audio Latar Belakang (BGM Lagu Salad Buah) -->
+    <audio id="bgm-audio" loop preload="auto">
+        <source src="fruit_salad_bgm.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Definisi SVG Anggur Hijau 3D agar dapat digunakan di seluruh slide -->
+    <svg width="0" height="0" style="position:absolute; width:0; height:0; overflow:hidden;" aria-hidden="true">
+        <defs>
+            <g id="butir-anggur">
+                <circle cx="0" cy="0" r="13" fill="#65a30d" stroke="#365314" stroke-width="1"/>
+                <circle cx="-1.5" cy="-1.5" r="10.5" fill="#84cc16"/>
+                <circle cx="-3.5" cy="-3.5" r="6.5" fill="#bef264"/>
+                <circle cx="-5" cy="-5" r="2.8" fill="#f7fee7"/>
+            </g>
+            <symbol id="anggur-hijau" viewBox="0 0 100 100">
+                <!-- Tangkai Anggur -->
+                <path d="M18 14 C18 28, 34 36, 54 54" stroke="#65a30d" stroke-width="6" stroke-linecap="round" fill="none"/>
+                <path d="M24 25 L20 42" stroke="#65a30d" stroke-width="4.5" stroke-linecap="round" fill="none"/>
+                <path d="M31 32 L42 30" stroke="#84cc16" stroke-width="4.5" stroke-linecap="round" fill="none"/>
+                <!-- Lapisan Belakang Buah Anggur Hijau -->
+                <use href="#butir-anggur" x="38" y="42"/>
+                <use href="#butir-anggur" x="56" y="36"/>
+                <use href="#butir-anggur" x="67" y="46"/>
+                <use href="#butir-anggur" x="28" y="50"/>
+                <use href="#butir-anggur" x="46" y="78"/>
+                <use href="#butir-anggur" x="65" y="86"/>
+                <!-- Lapisan Tengah Buah Anggur Hijau -->
+                <use href="#butir-anggur" x="20" y="55"/>
+                <use href="#butir-anggur" x="23" y="72"/>
+                <use href="#butir-anggur" x="36" y="75"/>
+                <use href="#butir-anggur" x="64" y="60"/>
+                <use href="#butir-anggur" x="73" y="72"/>
+                <use href="#butir-anggur" x="80" y="84"/>
+                <use href="#butir-anggur" x="54" y="76"/>
+                <!-- Lapisan Depan Buah Anggur Hijau -->
+                <use href="#butir-anggur" x="42" y="31"/>
+                <use href="#butir-anggur" x="58" y="48"/>
+                <use href="#butir-anggur" x="44" y="50"/>
+                <use href="#butir-anggur" x="22" y="62"/>
+                <use href="#butir-anggur" x="38" y="65"/>
+                <use href="#butir-anggur" x="54" y="63"/>
+                <use href="#butir-anggur" x="66" y="76"/>
+            </symbol>
+        </defs>
+    </svg>
+
+    <!-- HEADER -->
+    <div class="w-full bg-pink-500 text-white py-2.5 px-4 md:px-6 flex justify-between items-center shadow-md z-20 shrink-0">
+        <div class="text-lg md:text-2xl font-bold flex items-center gap-2">
+            🥗 <span class="tracking-wide">Dapur Ceria TK</span>
+        </div>
+        <div class="flex items-center gap-2 md:gap-3">
+            <button onclick="openRemoteModal()" class="text-xs md:text-sm font-bold bg-pink-600 hover:bg-pink-700 text-white py-1.5 px-3 rounded-full shadow transition-transform active:scale-95 flex items-center gap-1 border border-pink-300">
+                📱 Remote iPhone
+            </button>
+            <button id="btn-music" onclick="toggleMusic()" class="text-xs md:text-base font-bold bg-yellow-300 hover:bg-yellow-400 text-yellow-900 py-1.5 px-4 rounded-full shadow-md transition-transform active:scale-95 flex items-center gap-1.5">
+                🎵 Putar Musik
+            </button>
+            <span id="audio-status-text" class="text-xs font-semibold text-amber-200 bg-pink-700/60 px-2.5 py-1 rounded-full hidden sm:inline-block">Siap</span>
+            <div class="text-xs md:text-base font-semibold bg-pink-600 py-1.5 px-4 rounded-full shadow-inner hidden sm:block">
+                Oleh: Dwi Yuniar Sari (Mama Shanum)
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN SLIDE AREA -->
+    <div class="flex-grow relative overflow-hidden bg-gradient-to-b from-amber-50 via-pink-50 to-sky-100">
+
+        <!-- SLIDE 0: Kover Depan -->
+        <div id="slide-0" class="slide active items-center justify-center text-center p-6 overflow-y-auto">
+            <div class="bg-white/80 backdrop-blur-sm p-8 md:p-10 rounded-3xl shadow-xl border-4 border-pink-200 max-w-3xl w-full flex flex-col items-center">
+                <div class="text-6xl md:text-8xl mb-4 animate-bounce-slow flex gap-3 items-center justify-center flex-wrap">
+                    <span>🥭</span><span>🍊</span><span>🍈</span>
+                    <svg class="w-16 h-16 md:w-24 md:h-24 inline-block"><use href="#anggur-hijau"/></svg>
+                    <span>🍮</span>
+                </div>
+                <span class="bg-pink-100 text-pink-600 font-bold px-4 py-1 rounded-full text-sm md:text-base mb-3">
+                    Kelas Memasak Anak TK
+                </span>
+                <h1 class="text-3xl md:text-6xl font-bold text-pink-500 mb-4 drop-shadow-sm">
+                    Ayo Membuat Salad Buah!
+                </h1>
+                <p class="text-base md:text-2xl text-gray-700 mb-6 max-w-2xl leading-relaxed">
+                    Halo anak-anak hebat! Hari ini kita akan belajar membuat <b>Salad Buah</b> yang segar, manis, dan sehat bersama:
+                </p>
+                <div class="bg-gradient-to-r from-amber-100 to-pink-100 border-2 border-pink-300 px-6 py-3 rounded-2xl mb-8 shadow-sm">
+                    <div class="text-lg md:text-2xl font-bold text-pink-700">👩‍🍳 Ibu Dwi Yuniar Sari</div>
+                    <div class="text-sm md:text-lg font-semibold text-amber-700">(Mama Shanum)</div>
+                </div>
+                <button onclick="startPresentation()" class="bg-gradient-to-r from-yellow-400 to-amber-400 hover:from-yellow-500 hover:to-amber-500 text-amber-950 font-bold py-3.5 px-10 rounded-full text-xl md:text-2xl shadow-lg transition-transform transform hover:scale-105 active:scale-95 border-b-4 border-amber-600">
+                    Mulai Belajar & Putar Musik! 🚀
+                </button>
+            </div>
+        </div>
+
+        <!-- SLIDE 1: Alat-alat (7 Alat Tanpa Perasan Jeruk) -->
+        <div id="slide-1" class="slide items-center justify-start pt-4 md:pt-8 px-4 md:px-6 overflow-y-auto pb-6">
+            <h2 class="text-2xl md:text-4xl font-bold text-sky-600 mb-2 bg-white px-6 py-2 rounded-full shadow-md border-2 border-sky-200">
+                1. Alat yang Dibutuhkan 🛠️
+            </h2>
+            <p class="text-gray-600 text-sm md:text-lg mb-4 font-medium text-center">Klik pada gambar alat untuk melihat namanya berbunyi!</p>
+            
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 md:gap-5 max-w-5xl w-full">
+                
+                <!-- 1. Baskom -->
+                <div onclick="popCard(this)" class="bg-white p-3 md:p-4 rounded-3xl shadow-md border-b-4 border-sky-300 text-center cursor-pointer transform transition hover:scale-105 flex flex-col items-center justify-center">
+                    <svg class="w-20 h-20 md:w-24 md:h-24 mb-2" viewBox="0 0 120 100">
+                        <ellipse cx="60" cy="32" rx="48" ry="14" fill="#38bdf8" stroke="#0284c7" stroke-width="4"/>
+                        <ellipse cx="60" cy="32" rx="40" ry="9" fill="#bae6fd"/>
+                        <path d="M12 32 C12 78, 35 88, 60 88 C85 88, 108 78, 108 32 Z" fill="#0ea5e9" stroke="#0284c7" stroke-width="4"/>
+                        <ellipse cx="60" cy="32" rx="48" ry="12" fill="none" stroke="#7dd3fc" stroke-width="4"/>
+                        <path d="M28 50 Q40 70 65 72" stroke="#bae6fd" stroke-width="4" stroke-linecap="round" fill="none"/>
+                    </svg>
+                    <div class="font-bold text-base md:text-lg text-gray-800">1. Baskom</div>
+                    <div class="text-xs text-gray-500">Wadah mencampur</div>
+                </div>
+
+                <!-- 2. Pisau -->
+                <div onclick="popCard(this)" class="bg-white p-3 md:p-4 rounded-3xl shadow-md border-b-4 border-rose-300 text-center cursor-pointer transform transition hover:scale-105 flex flex-col items-center justify-center">
+                    <svg class="w-20 h-20 md:w-24 md:h-24 mb-2" viewBox="0 0 120 100">
+                        <g transform="rotate(-25 60 50)">
+                            <path d="M15 45 L75 45 C75 45, 72 68, 15 62 Z" fill="#e2e8f0" stroke="#64748b" stroke-width="3.5" stroke-linejoin="round"/>
+                            <path d="M18 59 C45 62, 68 52, 72 47" stroke="#ffffff" stroke-width="2.5" fill="none"/>
+                            <rect x="75" y="42" width="32" height="14" rx="7" fill="#f43f5e" stroke="#be123c" stroke-width="3.5"/>
+                            <circle cx="84" cy="49" r="2.5" fill="#fecdd3"/>
+                            <circle cx="96" cy="49" r="2.5" fill="#fecdd3"/>
+                        </g>
+                    </svg>
+                    <div class="font-bold text-base md:text-lg text-gray-800">2. Pisau</div>
+                    <div class="text-xs text-rose-500 font-semibold">Hati-hati tajam!</div>
+                </div>
+
+                <!-- 3. Gelas Saji -->
+                <div onclick="popCard(this)" class="bg-white p-3 md:p-4 rounded-3xl shadow-md border-b-4 border-cyan-300 text-center cursor-pointer transform transition hover:scale-105 flex flex-col items-center justify-center">
+                    <svg class="w-20 h-20 md:w-24 md:h-24 mb-2" viewBox="0 0 120 100">
+                        <path d="M32 18 L40 82 C41 88, 79 88, 80 82 L88 18 Z" fill="#e0f2fe" fill-opacity="0.7" stroke="#0284c7" stroke-width="4" stroke-linejoin="round"/>
+                        <path d="M39 76 L40 83 C41 88, 79 88, 80 83 L81 76 Z" fill="#bae6fd" stroke="#0284c7" stroke-width="3"/>
+                        <ellipse cx="60" cy="18" rx="28" ry="6" fill="#f0f9ff" stroke="#0284c7" stroke-width="4"/>
+                        <path d="M40 28 L44 68" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/>
+                        <path d="M48 34 L50 55" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>
+                    </svg>
+                    <div class="font-bold text-base md:text-lg text-gray-800">3. Gelas</div>
+                    <div class="text-xs text-gray-500">Wadah saji salad</div>
+                </div>
+
+                <!-- 4. Piring -->
+                <div onclick="popCard(this)" class="bg-white p-3 md:p-4 rounded-3xl shadow-md border-b-4 border-amber-400 text-center cursor-pointer transform transition hover:scale-105 flex flex-col items-center justify-center">
+                    <svg class="w-20 h-20 md:w-24 md:h-24 mb-2" viewBox="0 0 120 100">
+                        <ellipse cx="60" cy="58" rx="46" ry="26" fill="#cbd5e1"/>
+                        <ellipse cx="60" cy="52" rx="48" ry="28" fill="#f8fafc" stroke="#0284c7" stroke-width="4"/>
+                        <ellipse cx="60" cy="52" rx="42" ry="23" fill="none" stroke="#38bdf8" stroke-width="2" stroke-dasharray="6 4"/>
+                        <ellipse cx="60" cy="53" rx="32" ry="17" fill="#e0f2fe" stroke="#7dd3fc" stroke-width="3"/>
+                        <path d="M36 46 Q48 39 64 41" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+                    </svg>
+                    <div class="font-bold text-base md:text-lg text-gray-800">4. Piring</div>
+                    <div class="text-xs text-gray-500">Alas & wadah buah</div>
+                </div>
+
+                <!-- 5. Sendok Makan -->
+                <div onclick="popCard(this)" class="bg-white p-3 md:p-4 rounded-3xl shadow-md border-b-4 border-purple-300 text-center cursor-pointer transform transition hover:scale-105 flex flex-col items-center justify-center">
+                    <svg class="w-20 h-20 md:w-24 md:h-24 mb-2" viewBox="0 0 120 100">
+                        <g transform="rotate(-30 60 50)">
+                            <rect x="52" y="42" width="48" height="10" rx="5" fill="#cbd5e1" stroke="#475569" stroke-width="3.5"/>
+                            <ellipse cx="36" cy="47" rx="22" ry="14" fill="#e2e8f0" stroke="#475569" stroke-width="3.5"/>
+                            <path d="M24 43 Q36 37 48 43" stroke="#ffffff" stroke-width="3" fill="none" stroke-linecap="round"/>
+                        </g>
+                    </svg>
+                    <div class="font-bold text-base md:text-lg text-gray-800">5. Sendok Makan</div>
+                    <div class="text-xs text-gray-500">Mengaduk & makan</div>
+                </div>
+
+                <!-- 6. Sendok Sayur / Centong -->
+                <div onclick="popCard(this)" class="bg-white p-3 md:p-4 rounded-3xl shadow-md border-b-4 border-pink-300 text-center cursor-pointer transform transition hover:scale-105 flex flex-col items-center justify-center">
+                    <svg class="w-20 h-20 md:w-24 md:h-24 mb-2" viewBox="0 0 120 100">
+                        <path d="M62 60 L92 18 C95 14, 102 18, 98 24 L70 65" fill="#f472b6" stroke="#be185d" stroke-width="3.5" stroke-linecap="round"/>
+                        <path d="M20 55 C20 86, 72 86, 72 55 Z" fill="#ec4899" stroke="#be185d" stroke-width="3.5"/>
+                        <ellipse cx="46" cy="55" rx="26" ry="8" fill="#fbcfe8" stroke="#be185d" stroke-width="3.5"/>
+                    </svg>
+                    <div class="font-bold text-base md:text-lg text-gray-800">6. Sendok Sayur</div>
+                    <div class="text-xs text-gray-500">Centong pengambil buah</div>
+                </div>
+
+                <!-- 7. Parutan Keju / Coklat -->
+                <div onclick="popCard(this)" class="bg-white p-3 md:p-4 rounded-3xl shadow-md border-b-4 border-slate-400 text-center cursor-pointer transform transition hover:scale-105 flex flex-col items-center justify-center col-span-2 sm:col-span-2">
+                    <svg class="w-20 h-20 md:w-24 md:h-24 mb-2" viewBox="0 0 120 100">
+                        <path d="M44 24 V14 C44 9, 76 9, 76 14 V24" fill="none" stroke="#ef4444" stroke-width="7" stroke-linecap="round"/>
+                        <polygon points="36,24 84,24 94,86 26,86" fill="#e2e8f0" stroke="#475569" stroke-width="4" stroke-linejoin="round"/>
+                        <g fill="#475569">
+                            <circle cx="48" cy="36" r="3"/><circle cx="60" cy="36" r="3"/><circle cx="72" cy="36" r="3"/>
+                            <circle cx="45" cy="48" r="3"/><circle cx="55" cy="48" r="3"/><circle cx="65" cy="48" r="3"/><circle cx="75" cy="48" r="3"/>
+                            <circle cx="43" cy="60" r="3"/><circle cx="54" cy="60" r="3"/><circle cx="66" cy="60" r="3"/><circle cx="77" cy="60" r="3"/>
+                            <circle cx="40" cy="72" r="3"/><circle cx="52" cy="72" r="3"/><circle cx="64" cy="72" r="3"/><circle cx="76" cy="72" r="3"/>
+                        </g>
+                        <rect x="24" y="83" width="72" height="6" rx="3" fill="#ef4444"/>
+                    </svg>
+                    <div class="font-bold text-base md:text-lg text-gray-800">7. Parutan Keju / Coklat</div>
+                    <div class="text-xs text-gray-500">Alat memarut keju di atas salad</div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- SLIDE 2: Bahan-bahan (Tanpa Lemon) -->
+        <div id="slide-2" class="slide items-center justify-start pt-4 md:pt-8 px-4 md:px-6 overflow-y-auto pb-6">
+            <h2 class="text-2xl md:text-4xl font-bold text-emerald-600 mb-4 bg-white px-6 py-2 rounded-full shadow-md border-2 border-emerald-200">
+                2. Bahan-bahan Lezat 😋
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 max-w-5xl w-full">
+                
+                <!-- Kolom Buah & Jeli -->
+                <div class="bg-white p-5 rounded-3xl shadow-lg border-4 border-emerald-200">
+                    <h3 class="text-lg md:text-xl font-bold text-emerald-700 mb-3 border-b-2 border-emerald-100 pb-2 flex items-center gap-2">
+                        🍓 Buah-buahan Segar & Jeli
+                    </h3>
+                    <div class="grid grid-cols-3 gap-3 text-center">
+                        <div onclick="popCard(this)" class="bg-amber-50 p-3 rounded-2xl border border-amber-200 cursor-pointer hover:scale-105 transition">
+                            <span class="block text-4xl md:text-5xl mb-1">🥭</span>
+                            <span class="text-xs md:text-sm font-bold text-gray-700">Mangga</span>
+                        </div>
+                        <div onclick="popCard(this)" class="bg-orange-50 p-3 rounded-2xl border border-orange-200 cursor-pointer hover:scale-105 transition">
+                            <span class="block text-4xl md:text-5xl mb-1">🍊</span>
+                            <span class="text-xs md:text-sm font-bold text-gray-700">Jeruk</span>
+                        </div>
+                        <div onclick="popCard(this)" class="bg-lime-50 p-3 rounded-2xl border border-lime-200 cursor-pointer hover:scale-105 transition">
+                            <span class="block text-4xl md:text-5xl mb-1">🍈</span>
+                            <span class="text-xs md:text-sm font-bold text-gray-700">Melon</span>
+                        </div>
+                        <div onclick="popCard(this)" class="bg-pink-50 p-3 rounded-2xl border border-pink-200 cursor-pointer hover:scale-105 transition flex flex-col items-center justify-center">
+                            <svg class="w-10 h-10 md:w-12 md:h-12 mb-1" viewBox="0 0 64 64">
+                                <ellipse cx="32" cy="34" rx="20" ry="22" fill="#e11d48" stroke="#9f1239" stroke-width="2.5"/>
+                                <ellipse cx="32" cy="36" rx="14" ry="15" fill="#fda4af"/>
+                                <circle cx="28" cy="32" r="1.5" fill="#1e293b"/><circle cx="36" cy="32" r="1.5" fill="#1e293b"/>
+                                <circle cx="32" cy="38" r="1.5" fill="#1e293b"/><circle cx="27" cy="41" r="1.5" fill="#1e293b"/>
+                                <circle cx="37" cy="41" r="1.5" fill="#1e293b"/>
+                                <path d="M22 14 Q32 4 42 14" stroke="#22c55e" stroke-width="4" fill="none" stroke-linecap="round"/>
+                            </svg>
+                            <span class="text-xs md:text-sm font-bold text-gray-700">Buah Naga</span>
+                        </div>
+                        <div onclick="popCard(this)" class="bg-emerald-50 p-3 rounded-2xl border border-emerald-200 cursor-pointer hover:scale-105 transition flex flex-col items-center justify-center">
+                            <svg class="w-10 h-10 md:w-12 md:h-12 mb-1"><use href="#anggur-hijau"/></svg>
+                            <span class="text-xs md:text-sm font-bold text-gray-700">Anggur Hijau</span>
+                        </div>
+                        <div onclick="popCard(this)" class="bg-rose-50 p-3 rounded-2xl border border-rose-200 cursor-pointer hover:scale-105 transition">
+                            <span class="block text-4xl md:text-5xl mb-1">🍮</span>
+                            <span class="text-xs md:text-sm font-bold text-rose-700">Jeli / Agar</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Kolom Saus Salad & Keju -->
+                <div class="bg-white p-5 rounded-3xl shadow-lg border-4 border-amber-200 flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-lg md:text-xl font-bold text-amber-700 mb-3 border-b-2 border-amber-100 pb-2 flex items-center gap-2">
+                            🥣 Bahan Saus Salad & Taburan
+                        </h3>
+                        <div class="grid grid-cols-2 gap-3 text-sm md:text-base text-gray-700 font-semibold">
+                            <div onclick="popCard(this)" class="bg-amber-50/70 p-3 rounded-2xl flex items-center gap-2.5 border border-amber-200 cursor-pointer hover:scale-105 transition">
+                                <span class="text-3xl">🫙</span>
+                                <div>
+                                    <div class="font-bold text-gray-800">Mayonais</div>
+                                    <div class="text-xs text-gray-500">Gurih & lembut</div>
+                                </div>
+                            </div>
+                            <div onclick="popCard(this)" class="bg-sky-50/70 p-3 rounded-2xl flex items-center gap-2.5 border border-sky-200 cursor-pointer hover:scale-105 transition">
+                                <span class="text-3xl">🥛</span>
+                                <div>
+                                    <div class="font-bold text-gray-800">Susu Kental Manis</div>
+                                    <div class="text-xs text-gray-500">Manis lezat</div>
+                                </div>
+                            </div>
+                            <div onclick="popCard(this)" class="bg-yellow-50/70 p-3 rounded-2xl flex items-center gap-2.5 border border-yellow-200 cursor-pointer hover:scale-105 transition">
+                                <span class="text-3xl">🍯</span>
+                                <div>
+                                    <div class="font-bold text-gray-800">Madu</div>
+                                    <div class="text-xs text-gray-500">Manis alami sehat</div>
+                                </div>
+                            </div>
+                            <div onclick="popCard(this)" class="bg-indigo-50/70 p-3 rounded-2xl flex items-center gap-2.5 border border-indigo-200 cursor-pointer hover:scale-105 transition">
+                                <span class="text-3xl">🥣</span>
+                                <div>
+                                    <div class="font-bold text-gray-800">Yoghurt Plain</div>
+                                    <div class="text-xs text-gray-500">Segar & sehat</div>
+                                </div>
+                            </div>
+                            <div onclick="popCard(this)" class="bg-yellow-100 p-3 rounded-2xl flex items-center justify-center gap-3 border-2 border-yellow-400 cursor-pointer hover:scale-105 transition col-span-2">
+                                <span class="text-4xl">🧀</span>
+                                <div>
+                                    <div class="font-bold text-yellow-900">Keju Cheddar</div>
+                                    <div class="text-xs text-yellow-700">Untuk diparut di atas salad buah!</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- SLIDE 3: PANGGUNG ANIMASI 10 LANGKAH MEMASAK -->
+        <div id="slide-3" class="slide items-center justify-start pt-2 md:pt-4 px-2 md:px-6 overflow-y-auto pb-4">
+            
+            <div class="w-full max-w-4xl bg-white rounded-3xl shadow-2xl border-4 border-purple-300 overflow-hidden flex flex-col">
+                
+                <!-- Bar Langkah 1 - 10 (Bisa Diklik Langsung) -->
+                <div class="bg-purple-600 text-white px-3 py-2 flex flex-wrap items-center justify-between gap-2">
+                    <div class="font-bold text-sm md:text-lg flex items-center gap-1.5">
+                        🎬 <span>Panggung Animasi Memasak:</span>
+                    </div>
+                    <div class="flex gap-1 md:gap-1.5 flex-wrap justify-center" id="step-pills">
+                        <button onclick="goToCookingStep(1)" class="step-pill w-7 h-7 md:w-8 md:h-8 rounded-full font-bold text-xs md:text-sm bg-yellow-400 text-purple-900 shadow">1</button>
+                        <button onclick="goToCookingStep(2)" class="step-pill w-7 h-7 md:w-8 md:h-8 rounded-full font-bold text-xs md:text-sm bg-purple-400 text-white">2</button>
+                        <button onclick="goToCookingStep(3)" class="step-pill w-7 h-7 md:w-8 md:h-8 rounded-full font-bold text-xs md:text-sm bg-purple-400 text-white">3</button>
+                        <button onclick="goToCookingStep(4)" class="step-pill w-7 h-7 md:w-8 md:h-8 rounded-full font-bold text-xs md:text-sm bg-purple-400 text-white">4</button>
+                        <button onclick="goToCookingStep(5)" class="step-pill w-7 h-7 md:w-8 md:h-8 rounded-full font-bold text-xs md:text-sm bg-purple-400 text-white">5</button>
+                        <button onclick="goToCookingStep(6)" class="step-pill w-7 h-7 md:w-8 md:h-8 rounded-full font-bold text-xs md:text-sm bg-purple-400 text-white">6</button>
+                        <button onclick="goToCookingStep(7)" class="step-pill w-7 h-7 md:w-8 md:h-8 rounded-full font-bold text-xs md:text-sm bg-purple-400 text-white">7</button>
+                        <button onclick="goToCookingStep(8)" class="step-pill w-7 h-7 md:w-8 md:h-8 rounded-full font-bold text-xs md:text-sm bg-purple-400 text-white">8</button>
+                        <button onclick="goToCookingStep(9)" class="step-pill w-7 h-7 md:w-8 md:h-8 rounded-full font-bold text-xs md:text-sm bg-purple-400 text-white">9</button>
+                        <button onclick="goToCookingStep(10)" class="step-pill w-7 h-7 md:w-8 md:h-8 rounded-full font-bold text-xs md:text-sm bg-purple-400 text-white">10</button>
+                    </div>
+                </div>
+
+                <!-- Narasi Langkah Saat Ini -->
+                <div class="bg-amber-50 border-b-2 border-amber-200 px-4 py-2.5 text-center">
+                    <div id="anim-step-badge" class="inline-block bg-purple-100 text-purple-800 text-xs md:text-sm font-bold px-3 py-0.5 rounded-full mb-1">
+                        Langkah 1 dari 10
+                    </div>
+                    <div id="anim-text" class="text-base md:text-2xl font-bold text-gray-800 leading-snug">
+                        1. Siapkan semua alat dan bahan di atas meja dapur!
+                    </div>
+                </div>
+
+                <!-- LAYAR DAPUR VISUAL -->
+                <div id="animation-stage" class="relative w-full h-64 sm:h-72 md:h-80 bg-gradient-to-b from-sky-100 via-sky-50 to-amber-100 overflow-hidden flex items-center justify-center">
+                    
+                    <!-- Dekorasi Dinding Dapur & Meja Kayu -->
+                    <div class="absolute top-3 left-4 opacity-40 text-3xl hidden sm:block">🖼️ 🪴</div>
+                    <div class="absolute top-3 right-4 opacity-40 text-3xl hidden sm:block">⏰ 👩‍🍳</div>
+                    <!-- Meja Dapur -->
+                    <div class="absolute bottom-0 left-0 w-full h-20 bg-amber-200 border-t-8 border-amber-400"></div>
+
+                    <!-- CONTAINER ADEGAN DINAMIS -->
+                    <div id="scene-container" class="relative z-10 w-full h-full flex items-center justify-center">
+                        <!-- Isi adegan dirender otomatis oleh JavaScript sesuai langkah 1-10 -->
+                    </div>
+
+                </div>
+
+                <!-- KONTROL PEMUTAR ANIMASI -->
+                <div class="bg-gray-100 p-3 flex flex-wrap justify-between items-center gap-2 border-t-2 border-gray-200">
+                    <div class="flex items-center gap-2">
+                        <button onclick="prevCookingStep()" class="bg-white hover:bg-gray-200 text-gray-700 font-bold py-2 px-4 rounded-full text-xs md:text-base shadow border border-gray-300 active:scale-95">
+                            ⏮️ Langkah Sebelumnya
+                        </button>
+                        <button onclick="nextCookingStep()" class="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-full text-xs md:text-base shadow active:scale-95">
+                            Langkah Berikutnya ⏭️
+                        </button>
+                    </div>
+
+                    <button id="btn-play-anim" onclick="toggleAutoPlayCooking()" class="bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white font-bold py-2 px-6 rounded-full text-sm md:text-base shadow-md transition-transform active:scale-95 flex items-center gap-2">
+                        ▶️ Putar Semua Otomatis
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- SLIDE 4: Selesai -->
+        <div id="slide-4" class="slide items-center justify-center text-center p-6 overflow-y-auto">
+            <div class="bg-white/90 p-8 rounded-3xl shadow-xl border-4 border-pink-300 max-w-2xl w-full flex flex-col items-center">
+                <div class="text-7xl md:text-8xl mb-4 animate-bounce-slow">
+                    🥗🎉🥳
+                </div>
+                <h1 class="text-3xl md:text-5xl font-bold text-pink-500 mb-3">
+                    Hore! Salad Buah Siap Dinikmati!
+                </h1>
+                <p class="text-base md:text-2xl text-gray-700 font-medium mb-6">
+                    Rasanya manis, segar, lembut, dan penuh vitamin! Selamat mencoba membuat di rumah ya anak-anak hebat!
+                </p>
+                <div class="bg-pink-100 text-pink-800 font-bold px-6 py-3 rounded-2xl shadow-sm text-sm md:text-lg mb-4">
+                    Terima kasih sudah belajar bersama <br>
+                    <span class="text-pink-600 text-base md:text-xl">Ibu Dwi Yuniar Sari (Mama Shanum) ❤️</span>
+                </div>
+                <button onclick="goToSlide(0)" class="bg-sky-500 hover:bg-sky-600 text-white font-bold py-2.5 px-6 rounded-full shadow-md transition active:scale-95">
+                    🔄 Kembali ke Awal Presentasi
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- FOOTER NAVIGATION -->
+    <div class="w-full bg-white py-3 px-4 md:px-6 flex justify-between items-center shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.08)] z-20 shrink-0">
+        <button onclick="prevSlide()" id="btn-prev" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-2 px-5 rounded-full text-sm md:text-base transition-colors opacity-50 cursor-not-allowed">
+            ⬅️ Slide Sebelumnya
+        </button>
+        <div class="text-gray-600 font-bold text-xs md:text-base">
+            Halaman <span id="slide-indicator">1</span> / 5
+        </div>
+        <button onclick="nextSlide()" id="btn-next" class="bg-sky-500 hover:bg-sky-600 text-white font-bold py-2 px-5 rounded-full text-sm md:text-base transition-colors shadow-md">
+            Slide Berikutnya ➡️
+        </button>
+    </div>
+
+    <!-- JAVASCRIPT UTAMA -->
+    <script>
+        // --- 1. Logika Navigasi Slide Utama ---
+        const totalSlides = 5;
+        let currentSlide = 0;
+
+        function updateUI() {
+            for (let i = 0; i < totalSlides; i++) {
+                const slide = document.getElementById(`slide-${i}`);
+                if (slide) {
+                    if (i === currentSlide) {
+                        slide.classList.add('active');
+                    } else {
+                        slide.classList.remove('active');
+                    }
+                }
+            }
+
+            const indicator = document.getElementById('slide-indicator');
+            if (indicator) indicator.innerText = (currentSlide + 1);
+
+            const btnPrev = document.getElementById('btn-prev');
+            if (currentSlide === 0) {
+                btnPrev.classList.add('opacity-50', 'cursor-not-allowed');
+                btnPrev.disabled = true;
+            } else {
+                btnPrev.classList.remove('opacity-50', 'cursor-not-allowed');
+                btnPrev.disabled = false;
+            }
+
+            const btnNext = document.getElementById('btn-next');
+            if (currentSlide === totalSlides - 1) {
+                btnNext.classList.add('opacity-50', 'cursor-not-allowed');
+                btnNext.disabled = true;
+            } else {
+                btnNext.classList.remove('opacity-50', 'cursor-not-allowed');
+                btnNext.disabled = false;
+            }
+
+            if (currentSlide === 3) {
+                renderCookingStep(currentCookingStep);
+            } else {
+                stopAutoPlayCooking();
+            }
+        }
+
+        function goToSlide(index) {
+            currentSlide = index;
+            updateUI();
+        }
+
+        async function startPresentation() {
+            try {
+                await initAudio();
+                const bgm = document.getElementById('bgm-audio');
+                if (bgm) {
+                    bgm.volume = 0.5;
+                    bgm.play().then(() => {
+                        isMusicPlaying = true;
+                        updateMusicUI(true);
+                    }).catch(e => {
+                        console.log("Audio play prevented:", e);
+                    });
+                }
+            } catch (e) {
+                console.log("Audio SFX siap.", e);
+            }
+            nextSlide();
+        }
+
+        function updateMusicUI(playing) {
+            const btn = document.getElementById('btn-music');
+            const statusText = document.getElementById('audio-status-text');
+            if (playing) {
+                if (btn) {
+                    btn.innerHTML = '🎵 Musik Menyala';
+                    btn.className = 'text-xs md:text-base font-bold bg-green-400 hover:bg-green-500 text-green-950 py-1.5 px-4 rounded-full shadow-md transition-transform active:scale-95 flex items-center gap-1.5';
+                }
+                if (statusText) {
+                    statusText.innerText = 'Aktif';
+                    statusText.className = 'text-xs font-semibold text-emerald-100 bg-emerald-700/60 px-2.5 py-1 rounded-full hidden sm:inline-block';
+                }
+            } else {
+                if (btn) {
+                    btn.innerHTML = '🔇 Nyalakan Musik';
+                    btn.className = 'text-xs md:text-base font-bold bg-yellow-300 hover:bg-yellow-400 text-yellow-900 py-1.5 px-4 rounded-full shadow-md transition-transform active:scale-95 flex items-center gap-1.5';
+                }
+                if (statusText) {
+                    statusText.innerText = 'Mati';
+                    statusText.className = 'text-xs font-semibold text-rose-100 bg-rose-700/60 px-2.5 py-1 rounded-full hidden sm:inline-block';
+                }
+            }
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides - 1) {
+                currentSlide++;
+                playPopSFX();
+                updateUI();
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 0) {
+                currentSlide--;
+                playPopSFX();
+                updateUI();
+            }
+        }
+
+        function popCard(el) {
+            playPopSFX();
+            el.classList.add('scale-110');
+            setTimeout(() => el.classList.remove('scale-110'), 250);
+        }
+
+        // --- 2. Logika Efek Suara (Tone.js SFX) & Kontrol Musik ---
+        let audioInitialized = false;
+        let isMusicPlaying = false;
+        let noiseSynth, sfxSynth;
+        let lastSfxTime = 0;
+        let lastNoiseTime = 0;
+
+        function getSafeSfxTime() {
+            const now = Tone.now();
+            lastSfxTime = Math.max(now, lastSfxTime + 0.02);
+            return lastSfxTime;
+        }
+
+        function getSafeNoiseTime() {
+            const now = Tone.now();
+            lastNoiseTime = Math.max(now, lastNoiseTime + 0.02);
+            return lastNoiseTime;
+        }
+
+        async function initAudio() {
+            if (audioInitialized) return;
+            await Tone.start();
+
+            noiseSynth = new Tone.NoiseSynth({
+                noise: { type: "white" },
+                envelope: { attack: 0.005, decay: 0.09, sustain: 0 }
+            }).toDestination();
+            noiseSynth.volume.value = -14;
+
+            sfxSynth = new Tone.PolySynth(Tone.Synth, {
+                oscillator: { type: "sine" },
+                envelope: { attack: 0.02, decay: 0.15, sustain: 0.05, release: 0.4 }
+            }).toDestination();
+            sfxSynth.volume.value = -6;
+
+            audioInitialized = true;
+        }
+
+        async function toggleMusic() {
+            await initAudio();
+            const bgm = document.getElementById('bgm-audio');
+            
+            if (isMusicPlaying) {
+                isMusicPlaying = false;
+                if (bgm) bgm.pause();
+                updateMusicUI(false);
+            } else {
+                isMusicPlaying = true;
+                if (bgm) {
+                    bgm.volume = 0.5;
+                    bgm.play().catch(e => console.log('Audio play error:', e));
+                }
+                updateMusicUI(true);
+            }
+        }
+
+        function playPopSFX() {
+            if (!audioInitialized) return;
+            try {
+                sfxSynth.triggerAttackRelease("G5", "32n", getSafeSfxTime());
+            } catch (e) {}
+        }
+        function playChopSFX() {
+            if (!audioInitialized) return;
+            try {
+                noiseSynth.triggerAttackRelease("16n", getSafeNoiseTime());
+            } catch (e) {}
+        }
+        function playStirSFX() {
+            if (!audioInitialized) return;
+            try {
+                const startTime = getSafeSfxTime();
+                lastSfxTime = startTime + 0.12;
+                sfxSynth.triggerAttackRelease("D5", "16n", startTime);
+                sfxSynth.triggerAttackRelease("F5", "16n", startTime + 0.12);
+            } catch (e) {}
+        }
+        function playTadaSFX() {
+            if (!audioInitialized) return;
+            try {
+                const startTime = getSafeSfxTime();
+                lastSfxTime = startTime + 0.25;
+                sfxSynth.triggerAttackRelease(["C4", "E4", "G4"], "8n", startTime);
+                sfxSynth.triggerAttackRelease(["C4", "E4", "G4", "C5"], "2n", startTime + 0.2);
+            } catch (e) {}
+        }
+
+        // --- 3. Panggung Animasi 10 Langkah Memasak Salad Buah ---
+        let currentCookingStep = 1;
+        let stepSfxInterval = null;
+        let autoPlayTimer = null;
+        let isAutoPlaying = false;
+
+        const cookingStepsData = [
+            {
+                step: 1,
+                text: "1. Siapkan semua alat dan bahan yang bersih di atas meja!",
+                render: () => `
+                    <div class="flex flex-wrap items-center justify-center gap-4 md:gap-6 px-4 anim-pop">
+                        <!-- Piring & Alat -->
+                        <div class="bg-white/90 p-3 rounded-2xl shadow-md text-center animate-float">
+                            <svg class="w-16 h-16 mx-auto" viewBox="0 0 120 100">
+                                <ellipse cx="60" cy="56" rx="44" ry="24" fill="#cbd5e1"/>
+                                <ellipse cx="60" cy="50" rx="46" ry="26" fill="#f8fafc" stroke="#0284c7" stroke-width="4"/>
+                                <ellipse cx="60" cy="51" rx="30" ry="16" fill="#e0f2fe" stroke="#7dd3fc" stroke-width="3"/>
+                            </svg>
+                            <span class="text-xs font-bold text-gray-700">Piring & Alat</span>
+                        </div>
+                        <!-- Buah-buahan -->
+                        <div class="bg-white/90 p-3 rounded-2xl shadow-md text-center animate-bounce-slow">
+                            <div class="text-4xl md:text-5xl flex items-center justify-center gap-1">
+                                <span>🥭</span><span>🍊</span><span>🍈</span>
+                                <svg class="w-10 h-10 md:w-12 md:h-12 inline-block"><use href="#anggur-hijau"/></svg>
+                                <span>🍮</span>
+                            </div>
+                            <span class="text-xs font-bold text-emerald-700">Buah Segar & Jeli</span>
+                        </div>
+                        <!-- Saus & Keju -->
+                        <div class="bg-white/90 p-3 rounded-2xl shadow-md text-center animate-float">
+                            <div class="text-4xl md:text-5xl">🫙🥛🍯🥣🧀</div>
+                            <span class="text-xs font-bold text-amber-700">Saus & Keju</span>
+                        </div>
+                    </div>
+                `,
+                sfx: () => playPopSFX()
+            },
+            {
+                step: 2,
+                text: "2. Potong buah-buahan & jeli membentuk dadu kecil di atas piring!",
+                render: () => `
+                    <div class="relative w-80 h-56 flex items-center justify-center">
+                        <!-- Piring Besar -->
+                        <svg class="w-76 h-44 absolute bottom-1" viewBox="0 0 240 120">
+                            <ellipse cx="120" cy="74" rx="104" ry="36" fill="#94a3b8"/>
+                            <ellipse cx="120" cy="66" rx="106" ry="38" fill="#ffffff" stroke="#0284c7" stroke-width="5"/>
+                            <ellipse cx="120" cy="66" rx="96" ry="32" fill="none" stroke="#38bdf8" stroke-width="2.5" stroke-dasharray="8 5"/>
+                            <ellipse cx="120" cy="68" rx="76" ry="24" fill="#f0f9ff" stroke="#bae6fd" stroke-width="4"/>
+                        </svg>
+                        <!-- Buah Utuh di Kiri & Potongan Dadu di Kanan -->
+                        <div class="absolute bottom-14 left-16 text-4xl flex gap-1">🥭🍈</div>
+                        <!-- Potongan Dadu Warna-warni -->
+                        <div class="absolute bottom-12 right-14 grid grid-cols-4 gap-1 p-2">
+                            <div class="w-5 h-5 bg-amber-400 rounded border border-amber-600 shadow-sm animate-bounce"></div>
+                            <div class="w-5 h-5 bg-rose-500 rounded border border-rose-700 shadow-sm animate-bounce"></div>
+                            <div class="w-5 h-5 bg-lime-400 rounded border border-lime-600 shadow-sm animate-bounce"></div>
+                            <div class="w-5 h-5 bg-emerald-400 rounded border border-emerald-600 shadow-sm animate-bounce"></div>
+                            <div class="w-5 h-5 bg-orange-400 rounded border border-orange-600 shadow-sm"></div>
+                            <div class="w-5 h-5 bg-pink-400 rounded border border-pink-600 shadow-sm"></div>
+                            <div class="w-5 h-5 bg-amber-300 rounded border border-amber-500 shadow-sm"></div>
+                            <div class="w-5 h-5 bg-lime-300 rounded border border-lime-500 shadow-sm"></div>
+                        </div>
+                        <!-- Pisau Memotong -->
+                        <svg class="w-36 h-36 absolute top-2 left-28 anim-chop z-20" viewBox="0 0 120 100">
+                            <path d="M15 45 L75 45 C75 45, 72 68, 15 62 Z" fill="#f1f5f9" stroke="#475569" stroke-width="3.5"/>
+                            <rect x="75" y="42" width="32" height="14" rx="7" fill="#f43f5e" stroke="#be123c" stroke-width="3.5"/>
+                        </svg>
+                    </div>
+                `,
+                sfx: () => {
+                    stepSfxInterval = setInterval(playChopSFX, 350);
+                }
+            },
+            {
+                step: 3,
+                text: "3. Masukkan potongan buah & jeli ke dalam baskom, lalu sisihkan!",
+                render: () => `
+                    <div class="relative w-80 h-60 flex items-center justify-center">
+                        <!-- Potongan Buah Meluncur Masuk -->
+                        <div class="absolute top-2 flex gap-2 anim-drop z-10">
+                            <div class="w-6 h-6 bg-amber-400 rounded-md border border-amber-600"></div>
+                            <div class="w-6 h-6 bg-rose-500 rounded-md border border-rose-700"></div>
+                            <div class="w-6 h-6 bg-lime-400 rounded-md border border-lime-600"></div>
+                            <div class="w-6 h-6 bg-emerald-400 rounded-md border border-emerald-600"></div>
+                        </div>
+                        <!-- Baskom Biru Besar -->
+                        <svg class="w-56 h-44 absolute bottom-2 z-20" viewBox="0 0 140 100">
+                            <ellipse cx="70" cy="30" rx="58" ry="15" fill="#bae6fd" stroke="#0284c7" stroke-width="4"/>
+                            <!-- Tumpukan buah di dalam baskom -->
+                            <g>
+                                <rect x="35" y="20" width="12" height="12" rx="3" fill="#f59e0b"/>
+                                <rect x="50" y="18" width="12" height="12" rx="3" fill="#e11d48"/>
+                                <rect x="65" y="21" width="12" height="12" rx="3" fill="#84cc16"/>
+                                <rect x="80" y="19" width="12" height="12" rx="3" fill="#4ade80"/>
+                                <rect x="92" y="22" width="12" height="12" rx="3" fill="#fb923c"/>
+                            </g>
+                            <path d="M12 30 C12 82, 38 92, 70 92 C102 92, 128 82, 128 30 Z" fill="#0ea5e9" stroke="#0284c7" stroke-width="4"/>
+                            <path d="M32 52 Q50 75 78 76" stroke="#bae6fd" stroke-width="4" stroke-linecap="round" fill="none"/>
+                        </svg>
+                    </div>
+                `,
+                sfx: () => {
+                    stepSfxInterval = setInterval(playPopSFX, 450);
+                }
+            },
+            {
+                step: 4,
+                text: "4. Buat saus salad: campurkan mayonais, susu kental manis, madu, dan yoghurt!",
+                render: () => `
+                    <div class="relative w-96 h-60 flex items-center justify-center">
+                        <!-- Bahan-bahan Saus Menuang ke Mangkuk -->
+                        <div class="absolute top-2 flex gap-5 items-center animate-bounce">
+                            <div class="bg-white px-2.5 py-1.5 rounded-xl shadow border border-amber-300 text-xs font-bold flex items-center gap-1">🫙 Mayonais</div>
+                            <div class="bg-white px-2.5 py-1.5 rounded-xl shadow border border-sky-300 text-xs font-bold flex items-center gap-1">🥛 Susu</div>
+                            <div class="bg-white px-2.5 py-1.5 rounded-xl shadow border border-yellow-400 text-xs font-bold flex items-center gap-1">🍯 Madu</div>
+                            <div class="bg-white px-2.5 py-1.5 rounded-xl shadow border border-indigo-300 text-xs font-bold flex items-center gap-1">🥣 Yoghurt</div>
+                        </div>
+                        <!-- Tetesan Saus Krim & Madu Mengalir Masuk -->
+                        <div class="absolute top-14 flex gap-4 anim-drop">
+                            <div class="w-4 h-6 bg-amber-100 rounded-full border border-amber-300 shadow"></div>
+                            <div class="w-4 h-6 bg-white rounded-full border border-sky-200 shadow"></div>
+                            <div class="w-4 h-6 bg-amber-400 rounded-full border border-amber-500 shadow"></div>
+                            <div class="w-4 h-6 bg-indigo-50 rounded-full border border-indigo-200 shadow"></div>
+                        </div>
+                        <!-- Mangkuk Saus Salad -->
+                        <svg class="w-52 h-40 absolute bottom-2" viewBox="0 0 140 100">
+                            <ellipse cx="70" cy="34" rx="54" ry="14" fill="#fef3c7" stroke="#d97706" stroke-width="4"/>
+                            <ellipse cx="70" cy="36" rx="46" ry="10" fill="#fffbeb"/>
+                            <path d="M16 34 C16 80, 42 88, 70 88 C98 88, 124 80, 124 34 Z" fill="#fde68a" stroke="#d97706" stroke-width="4"/>
+                        </svg>
+                    </div>
+                `,
+                sfx: () => {
+                    stepSfxInterval = setInterval(playStirSFX, 550);
+                }
+            },
+            {
+                step: 5,
+                text: "5. Aduk saus salad menggunakan sendok makan hingga rata dan tercampur semua!",
+                render: () => `
+                    <div class="relative w-80 h-60 flex items-center justify-center">
+                        <!-- Sendok Makan Mengaduk -->
+                        <svg class="w-32 h-32 absolute top-4 z-10 anim-stir" viewBox="0 0 100 100">
+                            <rect x="44" y="8" width="12" height="58" rx="6" fill="#94a3b8" stroke="#475569" stroke-width="3"/>
+                            <ellipse cx="50" cy="70" rx="18" ry="22" fill="#e2e8f0" stroke="#475569" stroke-width="3"/>
+                        </svg>
+                        <!-- Mangkuk Saus Putih Creamy -->
+                        <svg class="w-56 h-40 absolute bottom-2 z-20" viewBox="0 0 140 100">
+                            <ellipse cx="70" cy="34" rx="54" ry="15" fill="#fffbeb" stroke="#d97706" stroke-width="4"/>
+                            <!-- Pusaran Saus Creamy -->
+                            <path d="M35 34 Q70 42 105 34 Q70 26 35 34" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+                            <path d="M16 34 C16 80, 42 90, 70 90 C98 90, 124 80, 124 34 Z" fill="#fde68a" stroke="#d97706" stroke-width="4"/>
+                            <text x="70" y="68" text-anchor="middle" fill="#b45309" font-size="13" font-weight="bold">Saus Salad Creamy</text>
+                        </svg>
+                    </div>
+                `,
+                sfx: () => {
+                    stepSfxInterval = setInterval(playStirSFX, 450);
+                }
+            },
+            {
+                step: 6,
+                text: "6. Lakukan tes rasa! Jika kurang pas, bisa ditambah sesuai selera. Yummy!",
+                render: () => `
+                    <div class="flex flex-col items-center justify-center anim-pop">
+                        <div class="text-7xl md:text-8xl mb-2 animate-bounce">😋🥄✨</div>
+                        <div class="bg-white px-5 py-2 rounded-full shadow-md border-2 border-pink-300 text-pink-600 font-bold text-base md:text-lg">
+                            "Hmm.. Manis, lembut, dan segar sekali!"
+                        </div>
+                    </div>
+                `,
+                sfx: () => playTadaSFX()
+            },
+            {
+                step: 7,
+                text: "7. Campurkan & ambil potongan buah dengan centong ke dalam gelas saji!",
+                render: () => `
+                    <div class="relative w-96 h-60 flex items-center justify-center gap-8">
+                        <!-- Baskom Buah di Kiri -->
+                        <svg class="w-36 h-32 absolute left-4 bottom-2" viewBox="0 0 140 100">
+                            <ellipse cx="70" cy="30" rx="55" ry="14" fill="#bae6fd" stroke="#0284c7" stroke-width="4"/>
+                            <path d="M15 30 C15 78, 40 88, 70 88 C100 88, 125 78, 125 30 Z" fill="#0ea5e9" stroke="#0284c7" stroke-width="4"/>
+                        </svg>
+                        <!-- Sendok Sayur / Centong Mengambil Buah -->
+                        <div class="absolute top-6 left-32 z-30 anim-ladle flex items-center">
+                            <svg class="w-28 h-24" viewBox="0 0 120 100">
+                                <path d="M62 60 L92 18 C95 14, 102 18, 98 24 L70 65" fill="#f472b6" stroke="#be185d" stroke-width="4"/>
+                                <path d="M20 55 C20 86, 72 86, 72 55 Z" fill="#ec4899" stroke="#be185d" stroke-width="4"/>
+                                <rect x="30" y="42" width="12" height="12" rx="2" fill="#f59e0b"/>
+                                <rect x="44" y="40" width="12" height="12" rx="2" fill="#e11d48"/>
+                                <rect x="38" y="32" width="12" height="12" rx="2" fill="#84cc16"/>
+                            </svg>
+                        </div>
+                        <!-- Gelas Saji Bening Terisi Buah di Kanan -->
+                        <svg class="w-40 h-48 absolute right-8 bottom-1 z-20" viewBox="0 0 120 130">
+                            <path d="M26 20 L36 112 C38 120, 82 120, 84 112 L94 20 Z" fill="#e0f2fe" fill-opacity="0.65" stroke="#0284c7" stroke-width="4"/>
+                            <!-- Potongan Buah Warna-warni di Dalam Gelas -->
+                            <g>
+                                <rect x="38" y="88" width="14" height="14" rx="3" fill="#f59e0b"/>
+                                <rect x="54" y="90" width="14" height="14" rx="3" fill="#e11d48"/>
+                                <rect x="68" y="87" width="13" height="14" rx="3" fill="#84cc16"/>
+                                <rect x="36" y="72" width="15" height="14" rx="3" fill="#9333ea"/>
+                                <rect x="52" y="73" width="15" height="14" rx="3" fill="#fb923c"/>
+                                <rect x="68" y="71" width="14" height="14" rx="3" fill="#f43f5e"/>
+                                <rect x="40" y="56" width="15" height="14" rx="3" fill="#84cc16"/>
+                                <rect x="57" y="57" width="15" height="14" rx="3" fill="#f59e0b"/>
+                            </g>
+                            <ellipse cx="60" cy="20" rx="34" ry="7" fill="none" stroke="#0284c7" stroke-width="4"/>
+                        </svg>
+                    </div>
+                `,
+                sfx: () => {
+                    stepSfxInterval = setInterval(playPopSFX, 500);
+                }
+            },
+            {
+                step: 8,
+                text: "8. Tuangkan saus salad secukupnya di atas buah potong di dalam gelas!",
+                render: () => `
+                    <div class="relative w-80 h-60 flex items-center justify-center">
+                        <!-- Aliran Saus Creamy Mengalir ke Gelas -->
+                        <div class="absolute top-2 z-20 flex flex-col items-center">
+                            <div class="bg-amber-100 border-2 border-amber-400 px-3 py-1 rounded-full text-xs font-bold text-amber-900 shadow">🥣 Tuang Saus Salad</div>
+                            <div class="w-8 h-24 bg-gradient-to-b from-amber-50 to-yellow-100 rounded-full animate-pulse border-x-2 border-amber-200"></div>
+                        </div>
+                        <!-- Gelas Saji dengan Buah + Lapisan Saus Salad -->
+                        <svg class="w-44 h-48 absolute bottom-1 z-20" viewBox="0 0 120 130">
+                            <path d="M26 20 L36 112 C38 120, 82 120, 84 112 L94 20 Z" fill="#e0f2fe" fill-opacity="0.65" stroke="#0284c7" stroke-width="4"/>
+                            <!-- Buah Potong -->
+                            <g>
+                                <rect x="38" y="88" width="14" height="14" rx="3" fill="#f59e0b"/>
+                                <rect x="54" y="90" width="14" height="14" rx="3" fill="#e11d48"/>
+                                <rect x="68" y="87" width="13" height="14" rx="3" fill="#84cc16"/>
+                                <rect x="36" y="72" width="15" height="14" rx="3" fill="#9333ea"/>
+                                <rect x="52" y="73" width="15" height="14" rx="3" fill="#fb923c"/>
+                                <rect x="68" y="71" width="14" height="14" rx="3" fill="#f43f5e"/>
+                                <rect x="36" y="56" width="15" height="14" rx="3" fill="#84cc16"/>
+                                <rect x="53" y="57" width="15" height="14" rx="3" fill="#f59e0b"/>
+                                <rect x="69" y="56" width="14" height="14" rx="3" fill="#e11d48"/>
+                            </g>
+                            <!-- Lapisan Saus Salad Creamy di Atas Buah -->
+                            <path d="M31 44 Q60 38 89 44 L86 64 Q72 72 60 62 Q48 72 34 64 Z" fill="#fffbeb" stroke="#fde68a" stroke-width="2"/>
+                            <ellipse cx="60" cy="20" rx="34" ry="7" fill="none" stroke="#0284c7" stroke-width="4"/>
+                        </svg>
+                    </div>
+                `,
+                sfx: () => {
+                    stepSfxInterval = setInterval(playStirSFX, 500);
+                }
+            },
+            {
+                step: 9,
+                text: "9. Beri taburan keju cheddar yang diparut menggunakan parutan keju!",
+                render: () => `
+                    <div class="relative w-80 h-60 flex items-center justify-center">
+                        <!-- Alat Parutan Keju & Balok Keju Bergerak di Atas Gelas -->
+                        <div class="absolute top-1 z-30 flex items-center">
+                            <!-- Parutan Logam -->
+                            <svg class="w-24 h-20 transform -rotate-12" viewBox="0 0 120 100">
+                                <path d="M44 24 V14 C44 9, 76 9, 76 14 V24" fill="none" stroke="#ef4444" stroke-width="7"/>
+                                <polygon points="36,24 84,24 94,86 26,86" fill="#e2e8f0" stroke="#475569" stroke-width="4"/>
+                                <circle cx="50" cy="45" r="3" fill="#475569"/><circle cx="65" cy="45" r="3" fill="#475569"/>
+                                <circle cx="48" cy="62" r="3" fill="#475569"/><circle cx="68" cy="62" r="3" fill="#475569"/>
+                            </svg>
+                            <!-- Keju Digosok -->
+                            <div class="text-4xl -ml-8 anim-rub-cheese">🧀</div>
+                        </div>
+                        <!-- Serutan Keju Berjatuhan -->
+                        <div class="absolute top-20 z-20 flex gap-2 anim-drop">
+                            <div class="w-2 h-5 bg-yellow-300 rounded-full border border-yellow-500"></div>
+                            <div class="w-2 h-5 bg-yellow-400 rounded-full border border-yellow-500"></div>
+                            <div class="w-2 h-5 bg-yellow-300 rounded-full border border-yellow-500"></div>
+                            <div class="w-2 h-5 bg-yellow-400 rounded-full border border-yellow-500"></div>
+                        </div>
+                        <!-- Gelas Saji Lengkap -->
+                        <svg class="w-44 h-48 absolute bottom-1 z-10" viewBox="0 0 120 130">
+                            <path d="M26 20 L36 112 C38 120, 82 120, 84 112 L94 20 Z" fill="#e0f2fe" fill-opacity="0.65" stroke="#0284c7" stroke-width="4"/>
+                            <g>
+                                <rect x="38" y="88" width="14" height="14" rx="3" fill="#f59e0b"/>
+                                <rect x="54" y="90" width="14" height="14" rx="3" fill="#e11d48"/>
+                                <rect x="68" y="87" width="13" height="14" rx="3" fill="#84cc16"/>
+                                <rect x="36" y="72" width="15" height="14" rx="3" fill="#9333ea"/>
+                                <rect x="52" y="73" width="15" height="14" rx="3" fill="#fb923c"/>
+                                <rect x="68" y="71" width="14" height="14" rx="3" fill="#f43f5e"/>
+                                <rect x="36" y="56" width="15" height="14" rx="3" fill="#84cc16"/>
+                                <rect x="53" y="57" width="15" height="14" rx="3" fill="#f59e0b"/>
+                                <rect x="69" y="56" width="14" height="14" rx="3" fill="#e11d48"/>
+                            </g>
+                            <path d="M31 44 Q60 38 89 44 L86 64 Q72 72 60 62 Q48 72 34 64 Z" fill="#fffbeb" stroke="#fde68a" stroke-width="2"/>
+                            <!-- Tumpukan Parutan Keju di Atas Saus -->
+                            <g fill="#facc15" stroke="#eab308" stroke-width="1">
+                                <rect x="36" y="36" width="10" height="4" rx="2" transform="rotate(-10 36 36)"/>
+                                <rect x="48" y="34" width="12" height="4" rx="2" transform="rotate(8 48 34)"/>
+                                <rect x="62" y="35" width="11" height="4" rx="2" transform="rotate(-6 62 35)"/>
+                                <rect x="74" y="37" width="10" height="4" rx="2" transform="rotate(12 74 37)"/>
+                                <rect x="44" y="39" width="12" height="4" rx="2"/>
+                                <rect x="58" y="39" width="12" height="4" rx="2"/>
+                            </g>
+                            <ellipse cx="60" cy="20" rx="34" ry="7" fill="none" stroke="#0284c7" stroke-width="4"/>
+                        </svg>
+                    </div>
+                `,
+                sfx: () => {
+                    stepSfxInterval = setInterval(playChopSFX, 350);
+                }
+            },
+            {
+                step: 10,
+                text: "10. Selesai! Salad buah yang sehat & lezat siap dinikmati bersama-sama! 🎉",
+                render: () => `
+                    <div class="relative flex flex-col items-center justify-center anim-pop">
+                        <!-- Gelas Salad Buah Jadi & Berkilau -->
+                        <svg class="w-48 h-52 anim-glow" viewBox="0 0 120 130">
+                            <path d="M26 24 L36 112 C38 120, 82 120, 84 112 L94 24 Z" fill="#e0f2fe" fill-opacity="0.75" stroke="#0284c7" stroke-width="4"/>
+                            <g>
+                                <rect x="38" y="88" width="14" height="14" rx="3" fill="#f59e0b"/>
+                                <rect x="54" y="90" width="14" height="14" rx="3" fill="#e11d48"/>
+                                <rect x="68" y="87" width="13" height="14" rx="3" fill="#84cc16"/>
+                                <rect x="36" y="72" width="15" height="14" rx="3" fill="#9333ea"/>
+                                <rect x="52" y="73" width="15" height="14" rx="3" fill="#fb923c"/>
+                                <rect x="68" y="71" width="14" height="14" rx="3" fill="#f43f5e"/>
+                                <rect x="36" y="56" width="15" height="14" rx="3" fill="#84cc16"/>
+                                <rect x="53" y="57" width="15" height="14" rx="3" fill="#f59e0b"/>
+                                <rect x="69" y="56" width="14" height="14" rx="3" fill="#e11d48"/>
+                            </g>
+                            <path d="M31 44 Q60 38 89 44 L86 64 Q72 72 60 62 Q48 72 34 64 Z" fill="#fffbeb" stroke="#fde68a" stroke-width="2"/>
+                            <!-- Taburan Keju Melimpah -->
+                            <g fill="#facc15" stroke="#ca8a04" stroke-width="1">
+                                <rect x="35" y="35" width="12" height="5" rx="2" transform="rotate(-10 35 35)"/>
+                                <rect x="48" y="32" width="14" height="5" rx="2" transform="rotate(8 48 32)"/>
+                                <rect x="62" y="33" width="13" height="5" rx="2" transform="rotate(-6 62 33)"/>
+                                <rect x="72" y="36" width="12" height="5" rx="2" transform="rotate(12 72 36)"/>
+                                <rect x="42" y="38" width="14" height="5" rx="2"/>
+                                <rect x="57" y="38" width="14" height="5" rx="2"/>
+                            </g>
+                            <!-- Hiasan Buah Ceri/Anggur di Puncak -->
+                            <circle cx="60" cy="26" r="8" fill="#e11d48" stroke="#9f1239" stroke-width="2"/>
+                            <ellipse cx="60" cy="24" rx="34" ry="6" fill="none" stroke="#0284c7" stroke-width="4"/>
+                        </svg>
+                        <div class="bg-gradient-to-r from-pink-500 to-amber-500 text-white font-bold px-5 py-1.5 rounded-full shadow-lg text-sm md:text-base -mt-2">
+                            ✨ Salad Buah Mama Shanum Siap! ✨
+                        </div>
+                    </div>
+                `,
+                sfx: () => {
+                    playTadaSFX();
+                    createConfetti();
+                }
+            }
+        ];
+
+        function clearStepIntervals() {
+            if (stepSfxInterval) {
+                clearInterval(stepSfxInterval);
+                stepSfxInterval = null;
+            }
+            document.querySelectorAll('.confetti').forEach(el => el.remove());
+        }
+
+        function renderCookingStep(stepNumber) {
+            clearStepIntervals();
+            currentCookingStep = stepNumber;
+            const data = cookingStepsData[stepNumber - 1];
+
+            document.getElementById('anim-step-badge').innerText = `Langkah ${data.step} dari 10`;
+            document.getElementById('anim-text').innerText = data.text;
+            document.getElementById('scene-container').innerHTML = data.render();
+
+            const pills = document.querySelectorAll('#step-pills .step-pill');
+            pills.forEach((pill, idx) => {
+                if (idx + 1 === stepNumber) {
+                    pill.className = "step-pill w-7 h-7 md:w-8 md:h-8 rounded-full font-bold text-xs md:text-sm bg-yellow-400 text-purple-900 shadow scale-110 transition";
+                } else if (idx + 1 < stepNumber) {
+                    pill.className = "step-pill w-7 h-7 md:w-8 md:h-8 rounded-full font-bold text-xs md:text-sm bg-emerald-400 text-emerald-950 transition";
+                } else {
+                    pill.className = "step-pill w-7 h-7 md:w-8 md:h-8 rounded-full font-bold text-xs md:text-sm bg-purple-400 text-white opacity-80 transition";
+                }
+            });
+
+            if (data.sfx) data.sfx();
+        }
+
+        function goToCookingStep(stepNumber) {
+            stopAutoPlayCooking();
+            renderCookingStep(stepNumber);
+        }
+
+        function nextCookingStep() {
+            stopAutoPlayCooking();
+            if (currentCookingStep < 10) {
+                renderCookingStep(currentCookingStep + 1);
+            } else {
+                renderCookingStep(1);
+            }
+        }
+
+        function prevCookingStep() {
+            stopAutoPlayCooking();
+            if (currentCookingStep > 1) {
+                renderCookingStep(currentCookingStep - 1);
+            }
+        }
+
+        async function toggleAutoPlayCooking() {
+            if (!audioInitialized) {
+                try { await initAudio(); } catch (e) {}
+            }
+
+            if (isAutoPlaying) {
+                stopAutoPlayCooking();
+            } else {
+                isAutoPlaying = true;
+                const btn = document.getElementById('btn-play-anim');
+                btn.innerHTML = '⏸️ Hentikan Otomatis';
+                btn.classList.replace('from-emerald-500', 'from-rose-500');
+                btn.classList.replace('to-green-600', 'to-red-600');
+
+                if (currentCookingStep === 10) {
+                    renderCookingStep(1);
+                } else {
+                    renderCookingStep(currentCookingStep);
+                }
+
+                autoPlayTimer = setInterval(() => {
+                    if (currentCookingStep < 10) {
+                        renderCookingStep(currentCookingStep + 1);
+                    } else {
+                        stopAutoPlayCooking();
+                    }
+                }, 3800);
+            }
+        }
+
+        function stopAutoPlayCooking() {
+            isAutoPlaying = false;
+            if (autoPlayTimer) {
+                clearInterval(autoPlayTimer);
+                autoPlayTimer = null;
+            }
+            clearStepIntervals();
+            const btn = document.getElementById('btn-play-anim');
+            if (btn) {
+                btn.innerHTML = '▶️ Putar Semua Otomatis';
+                btn.classList.replace('from-rose-500', 'from-emerald-500');
+                btn.classList.replace('to-red-600', 'to-green-600');
+            }
+        }
+
+        function createConfetti() {
+            const stage = document.getElementById('animation-stage');
+            const colors = ['#f43f5e', '#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899'];
+            for (let i = 0; i < 36; i++) {
+                let conf = document.createElement('div');
+                conf.className = 'confetti';
+                conf.style.left = Math.random() * 100 + '%';
+                conf.style.top = '-15px';
+                conf.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                conf.style.animation = `confetti-fall ${1.5 + Math.random() * 1.8}s linear forwards`;
+                conf.style.animationDelay = (Math.random() * 0.4) + 's';
+                stage.appendChild(conf);
+            }
+        }
+
+        updateUI();
+
+        // --- 4. Sistem Remote iPhone (WebRTC / PeerJS) ---
+        let peerInstance = null;
+        let activeRemoteConn = null;
+        let qrCodeGenerated = false;
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const remoteTargetId = urlParams.get('remote');
+
+        // Jika halaman dibuka dengan parameter ?remote=ID (di iPhone)
+        if (remoteTargetId) {
+            document.addEventListener("DOMContentLoaded", () => {
+                const remoteView = document.getElementById('remote-controller-view');
+                if (remoteView) remoteView.classList.remove('hidden');
+                initRemoteClient(remoteTargetId);
+            });
+        } else {
+            // Halaman presentasi (di iPad / Komputer)
+            document.addEventListener("DOMContentLoaded", () => {
+                initRemoteHost();
+            });
+        }
+
+        function initRemoteHost() {
+            const hostId = 'salad-tk-' + Math.random().toString(36).substring(2, 8);
+            peerInstance = new Peer(hostId);
+
+            peerInstance.on('open', (id) => {
+                console.log('Host Peer ID siap:', id);
+                renderHostQR(id);
+            });
+
+            peerInstance.on('connection', (conn) => {
+                activeRemoteConn = conn;
+                conn.on('open', () => {
+                    const statusEl = document.getElementById('remote-host-status');
+                    if (statusEl) {
+                        statusEl.innerText = '🟢 iPhone Terhubung!';
+                        statusEl.className = 'text-xs font-semibold text-emerald-700 bg-emerald-100 py-1.5 px-3 rounded-full mb-4 inline-block';
+                    }
+                });
+
+                conn.on('data', (data) => {
+                    handleRemoteCommand(data);
+                });
+
+                conn.on('close', () => {
+                    const statusEl = document.getElementById('remote-host-status');
+                    if (statusEl) {
+                        statusEl.innerText = '🟡 Menunggu koneksi iPhone...';
+                        statusEl.className = 'text-xs font-semibold text-amber-700 bg-amber-100 py-1.5 px-3 rounded-full mb-4 inline-block';
+                    }
+                });
+            });
+        }
+
+        function renderHostQR(hostId) {
+            const qrcodeContainer = document.getElementById('qrcode');
+            if (!qrcodeContainer || qrCodeGenerated) return;
+
+            const currentUrl = window.location.origin + window.location.pathname;
+            const remoteUrl = `${currentUrl}?remote=${hostId}`;
+
+            new QRCode(qrcodeContainer, {
+                text: remoteUrl,
+                width: 160,
+                height: 160,
+                colorDark: "#db2777",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.M
+            });
+            qrCodeGenerated = true;
+        }
+
+        function openRemoteModal() {
+            const modal = document.getElementById('remote-modal');
+            if (modal) modal.classList.remove('hidden');
+        }
+
+        function closeRemoteModal() {
+            const modal = document.getElementById('remote-modal');
+            if (modal) modal.classList.add('hidden');
+        }
+
+        function handleRemoteCommand(data) {
+            if (!data || !data.action) return;
+            if (data.action === 'next') {
+                if (currentSlide === 0) {
+                    startPresentation();
+                } else {
+                    nextSlide();
+                }
+            } else if (data.action === 'prev') {
+                prevSlide();
+            } else if (data.action === 'music') {
+                toggleMusic();
+            } else if (data.action === 'step') {
+                if (currentSlide === 3) {
+                    nextCookingStep();
+                } else {
+                    nextSlide();
+                }
+            }
+        }
+
+        // Logic Remote Client (di iPhone)
+        let clientConn = null;
+        function initRemoteClient(targetId) {
+            const clientPeer = new Peer();
+            const statusEl = document.getElementById('remote-client-status');
+
+            clientPeer.on('open', () => {
+                clientConn = clientPeer.connect(targetId);
+
+                clientConn.on('open', () => {
+                    if (statusEl) {
+                        statusEl.innerText = '🟢 Terhubung ke iPad!';
+                        statusEl.className = 'mt-2 inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-100 text-emerald-800 text-xs font-bold rounded-full';
+                    }
+                });
+
+                clientConn.on('close', () => {
+                    if (statusEl) {
+                        statusEl.innerText = '🔴 Terputus dari iPad';
+                        statusEl.className = 'mt-2 inline-flex items-center gap-1.5 px-3 py-1 bg-rose-100 text-rose-800 text-xs font-bold rounded-full';
+                    }
+                });
+            });
+
+            clientPeer.on('error', (err) => {
+                if (statusEl) {
+                    statusEl.innerText = '⚠️ Gagal terhubung';
+                    statusEl.className = 'mt-2 inline-flex items-center gap-1.5 px-3 py-1 bg-rose-100 text-rose-800 text-xs font-bold rounded-full';
+                }
+            });
+        }
+
+        function sendRemote(action) {
+            if (clientConn && clientConn.open) {
+                clientConn.send({ action: action });
+                if (navigator.vibrate) navigator.vibrate(40);
+            }
+        }
+    </script>
+
+</body>
+</html>
