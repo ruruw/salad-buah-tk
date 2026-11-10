@@ -885,6 +885,56 @@
             }, 1800);
         }
 
+                // --- 1.3. Audio Ducking (Mengecilkan Musik Otomatis Saat Ada Suara Bicara) ---
+        let duckTimeout = null;
+        let fadeInterval = null;
+
+        function setMusicVolumeSmooth(targetVol, durationMs = 250) {
+            const bgm = document.getElementById('bgm-audio');
+            if (!bgm) return;
+
+            if (fadeInterval) clearInterval(fadeInterval);
+            const startVol = bgm.volume;
+            const steps = 10;
+            const stepTime = Math.max(10, Math.floor(durationMs / steps));
+            const volDiff = (targetVol - startVol) / steps;
+            let stepCount = 0;
+
+            fadeInterval = setInterval(() => {
+                stepCount++;
+                let newVol = bgm.volume + volDiff;
+                if (newVol < 0) newVol = 0;
+                if (newVol > 1) newVol = 1;
+                bgm.volume = newVol;
+                if (stepCount >= steps) {
+                    bgm.volume = targetVol;
+                    clearInterval(fadeInterval);
+                    fadeInterval = null;
+                }
+            }, stepTime);
+        }
+
+        function duckMusicForSpeech() {
+            const bgm = document.getElementById('bgm-audio');
+            if (!bgm || bgm.paused) return;
+
+            // Turunkan volume musik ke 0.12 (sangat pelan dan tenang di latar)
+            setMusicVolumeSmooth(0.12, 180);
+
+            if (duckTimeout) clearTimeout(duckTimeout);
+        }
+
+        function restoreMusicAfterSpeech() {
+            const bgm = document.getElementById('bgm-audio');
+            if (!bgm || bgm.paused) return;
+
+            if (duckTimeout) clearTimeout(duckTimeout);
+            // Beri jeda 350ms setelah suara bicara selesai, lalu kembalikan volume musik normal (0.5)
+            duckTimeout = setTimeout(() => {
+                setMusicVolumeSmooth(0.5, 350);
+            }, 350);
+        }
+
         function popCard(el, customSpeech) {
             // 1. Pastikan Web Audio Tone.js aktif
             if (!audioInitialized) {
@@ -916,7 +966,7 @@
                 showFloatingSpeechToast(toastText, x, y);
             }
 
-            // 4. Suara Ucapan Asli (Speech Synthesis Bahasa Indonesia)
+            // 4. Suara Ucapan Asli (Speech Synthesis Bahasa Indonesia) dengan Auto-Ducking Musik
             const speechText = customSpeech || (itemName && toolPhrases[itemName]) || itemName;
             if (speechText && 'speechSynthesis' in window) {
                 try {
@@ -928,9 +978,33 @@
                     if (indonesianVoice) {
                         utterance.voice = indonesianVoice;
                     }
+
+                    // Saat mulai bicara: pelankan musik
+                    utterance.onstart = () => {
+                        duckMusicForSpeech();
+                    };
+
+                    // Saat selesai atau error: pulihkan volume musik
+                    utterance.onend = () => {
+                        restoreMusicAfterSpeech();
+                    };
+                    utterance.onerror = () => {
+                        restoreMusicAfterSpeech();
+                    };
+
+                    // Panggil duckMusicForSpeech langsung agar musik seketika mengecil halus
+                    duckMusicForSpeech();
+
+                    // Fallback timer jika browser tidak memicu onend
+                    const approxDuration = Math.max(2000, speechText.length * 110);
+                    setTimeout(() => {
+                        restoreMusicAfterSpeech();
+                    }, approxDuration);
+
                     window.speechSynthesis.speak(utterance);
                 } catch (e) {
                     console.warn('Speech error:', e);
+                    restoreMusicAfterSpeech();
                 }
             }
         }
