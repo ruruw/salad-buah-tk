@@ -567,66 +567,69 @@
 
         <!-- SLIDE 3: PANGGUNG ANIMASI 10 LANGKAH MEMASAK -->
         <div id="slide-3" class="slide items-center justify-center p-2 md:p-6 overflow-y-auto">
-            <div class="w-full max-w-4xl lg:max-w-5xl flex flex-col items-center justify-center my-auto py-2">
-                <div class="w-full bg-white rounded-3xl shadow-2xl border-4 border-purple-300 overflow-hidden flex flex-col">
+            <div class="w-full max-w-5xl lg:max-w-6xl xl:max-w-7xl flex flex-col items-center justify-center my-auto py-2">
+                <div class="w-full bg-white rounded-3xl shadow-2xl border-4 border-purple-400 overflow-hidden flex flex-col">
                 
                 <!-- Bar Langkah 1 - 10 (Bisa Diklik Langsung) -->
-                <div class="bg-purple-600 text-white px-3 py-2 flex flex-wrap items-center justify-between gap-2">
-                    <div class="font-bold text-sm md:text-lg flex items-center gap-1.5">
+                <div class="bg-gradient-to-r from-purple-700 via-purple-600 to-indigo-600 text-white px-4 md:px-6 py-2.5 md:py-3.5 flex flex-wrap items-center justify-between gap-2 shadow-sm">
+                    <div class="font-black text-base md:text-xl lg:text-2xl flex items-center gap-2">
                         🎬 <span>Panggung Animasi Memasak:</span>
                     </div>
-                    <div class="flex gap-1 md:gap-1.5 flex-wrap justify-center" id="step-pills">
-                        <button onclick="goToCookingStep(1)" class="step-pill w-7 h-7 md:w-8 md:h-8 rounded-full font-bold text-xs md:text-sm bg-yellow-400 text-purple-900 shadow">1</button>
-                        <button onclick="goToCookingStep(2)" class="step-pill w-7 h-7 md:w-8 md:h-8 rounded-full font-bold text-xs md:text-sm bg-purple-400 text-white">2</button>
-                        <button onclick="goToCookingStep(3)" class="step-pill w-7 h-7 md:w-8 md:h-8 rounded-full font-bold text-xs md:text-sm bg-purple-400 text-white">3</button>
-                        <button onclick="goToCookingStep(4)" class="step-pill w-7 h-7 md:w-8 md:h-8 rounded-full font-bold text-xs md:text-sm bg-purple-400 text-white">4</button>
-                        <button onclick="goToCookingStep(5)" class="step-pill w-7 h-7 md:w-8 md:h-8 rounded-full font-bold text-xs md:text-sm bg-purple-400 text-white">5</button>
-                        <button onclick="goToCookingStep(6)" class="step-pill w-7 h-7 md:w-8 md:h-8 rounded-full font-bold text-xs md:text-sm bg-purple-400 text-white">6</button>
-                        <button onclick="goToCookingStep(7)" class="step-pill w-7 h-7 md:w-8 md:h-8 rounded-full font-bold text-xs md:text-sm bg-purple-400 text-white">7</button>
-                        <button onclick="goToCookingStep(8)" class="step-pill w-7 h-7 md:w-8 md:h-8 rounded-full font-bold text-xs md:text-sm bg-purple-400 text-white">8</button>
-                        <button onclick="goToCookingStep(9)" class="step-pill w-7 h-7 md:w-8 md:h-8 rounded-full font-bold text-xs md:text-sm bg-purple-400 text-white">9</button>
-                        <button onclick="goToCookingStep(10)" class="step-pill w-7 h-7 md:w-8 md:h-8 rounded-full font-bold text-xs md:text-sm bg-purple-400 text-white">10</button>
+                    <div class="flex gap-1.5 md:gap-2 flex-wrap justify-center" id="step-pills">
+                        <button onclick="goToCookingStep(1)" class="step-pill w-8 h-8 md:w-10 md:h-10 rounded-full font-black text-xs md:text-base bg-yellow-400 text-purple-950 shadow-md">1</button>
+                        <button onclick="goToCookingStep(2)" class="step-pill w-8 h-8 md:w-10 md:h-10 rounded-full font-black text-xs md:text-base bg-purple-400 text-white">2</button>
+                        <button onclick="goToCookingStep(3)" class="step-pill w-8 h-8 md:w-10 md:h-10 rounded-full font-black text-xs md:text-base bg-purple-400 text-white">3</button>
+                        <button onclick="goToCookingStep(4)" class="step-pill w-8 h-8 md:w-10 md:h-10 rounded-full font-black text-xs md:text-base bg-purple-400 text-white">4</button>
+                        <button onclick="goToCookingStep(5)" class="step-pill w-8 h-8 md:w-10 md:h-10 rounded-full font-black text-xs md:text-base bg-purple-400 text-white">5</button>
+                        <button onclick="goToCookingStep(6)" class="step-pill w-8 h-8 md:w-10 md:h-10 rounded-full font-black text-xs md:text-base bg-purple-400 text-white">6</button>
+                        <button onclick="goToCookingStep(7)" class="step-pill w-8 h-8 md:w-10 md:h-10 rounded-full font-black text-xs md:text-base bg-purple-400 text-white">7</button>
+                        <button onclick="goToCookingStep(8)" class="step-pill w-8 h-8 md:w-10 md:h-10 rounded-full font-black text-xs md:text-base bg-purple-400 text-white">8</button>
+                        <button onclick="goToCookingStep(9)" class="step-pill w-8 h-8 md:w-10 md:h-10 rounded-full font-black text-xs md:text-base bg-purple-400 text-white">9</button>
+                        <button onclick="goToCookingStep(10)" class="step-pill w-8 h-8 md:w-10 md:h-10 rounded-full font-black text-xs md:text-base bg-purple-400 text-white">10</button>
                     </div>
                 </div>
 
                 <!-- Narasi Langkah Saat Ini -->
-                <div class="bg-amber-50 border-b-2 border-amber-200 px-4 py-2.5 text-center">
-                    <div id="anim-step-badge" class="inline-block bg-purple-100 text-purple-800 text-xs md:text-sm font-bold px-3 py-0.5 rounded-full mb-1">
+                <div class="bg-gradient-to-r from-amber-50 via-yellow-50 to-amber-50 border-b-2 border-amber-200 px-4 md:px-8 py-3 md:py-4 text-center">
+                    <div id="anim-step-badge" class="inline-block bg-purple-600 text-white text-xs md:text-sm font-black px-4 py-1 rounded-full mb-1.5 shadow-sm">
                         Langkah 1 dari 10
                     </div>
-                    <div id="anim-text" class="text-base md:text-2xl font-bold text-gray-800 leading-snug">
-                        1. Siapkan semua alat dan bahan di atas meja dapur!
+                    <div id="anim-text" class="text-lg md:text-2xl lg:text-3xl font-black text-gray-800 leading-snug">
+                        1. Siapkan semua alat dan bahan yang bersih di atas meja!
                     </div>
                 </div>
 
                 <!-- LAYAR DAPUR VISUAL -->
-                <div id="animation-stage" class="relative w-full h-72 sm:h-80 md:h-96 lg:h-[420px] bg-gradient-to-b from-sky-100 via-sky-50 to-amber-100 overflow-hidden flex items-center justify-center">
+                <div id="animation-stage" class="relative w-full h-80 sm:h-96 md:h-[420px] lg:h-[480px] bg-gradient-to-b from-sky-100 via-sky-50 to-amber-100 overflow-hidden flex flex-col justify-end">
                     
-                    <!-- Dekorasi Dinding Dapur & Meja Kayu -->
-                    <div class="absolute top-3 left-4 opacity-40 text-3xl hidden sm:block">🖼️ 🪴</div>
-                    <div class="absolute top-3 right-4 opacity-40 text-3xl hidden sm:block">⏰ 👩‍🍳</div>
-                    <!-- Meja Dapur -->
-                    <div class="absolute bottom-0 left-0 w-full h-20 bg-amber-200 border-t-8 border-amber-400"></div>
+                    <!-- Dekorasi Dinding Dapur -->
+                    <div class="absolute top-4 left-6 opacity-60 text-3xl md:text-4xl flex items-center gap-2 hidden sm:flex">🖼️ 🪴</div>
+                    <div class="absolute top-4 right-6 opacity-60 text-3xl md:text-4xl flex items-center gap-2 hidden sm:flex">⏰ 👩‍🍳</div>
+                    
+                    <!-- Meja Dapur Kayu -->
+                    <div class="absolute bottom-0 left-0 w-full h-24 md:h-28 bg-gradient-to-r from-amber-200 via-amber-100 to-amber-200 border-t-8 border-amber-400 shadow-[0_-4px_10px_rgba(0,0,0,0.06)] flex items-center justify-center">
+                        <div class="w-full h-full opacity-15 bg-[radial-gradient(#b45309_1px,transparent_1px)] [background-size:16px_16px]"></div>
+                    </div>
 
                     <!-- CONTAINER ADEGAN DINAMIS -->
-                    <div id="scene-container" class="relative z-10 w-full h-full flex items-center justify-center">
+                    <div id="scene-container" class="relative z-10 w-full h-full flex items-end justify-center pb-5 md:pb-7">
                         <!-- Isi adegan dirender otomatis oleh JavaScript sesuai langkah 1-10 -->
                     </div>
 
                 </div>
 
                 <!-- KONTROL PEMUTAR ANIMASI -->
-                <div class="bg-gray-100 p-3 flex flex-wrap justify-between items-center gap-2 border-t-2 border-gray-200">
-                    <div class="flex items-center gap-2">
-                        <button onclick="prevCookingStep()" class="bg-white hover:bg-gray-200 text-gray-700 font-bold py-2 px-4 rounded-full text-xs md:text-base shadow border border-gray-300 active:scale-95">
+                <div class="bg-gray-100 p-3 md:p-4 flex flex-wrap justify-between items-center gap-3 border-t-2 border-gray-200">
+                    <div class="flex items-center gap-2 md:gap-3">
+                        <button onclick="prevCookingStep()" class="bg-white hover:bg-gray-100 text-gray-800 font-black py-2.5 px-4 md:px-6 rounded-2xl text-xs md:text-base shadow-md border-2 border-gray-300 active:scale-95 flex items-center gap-1.5 transition">
                             ⏮️ Langkah Sebelumnya
                         </button>
-                        <button onclick="nextCookingStep()" class="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-full text-xs md:text-base shadow active:scale-95">
+                        <button onclick="nextCookingStep()" class="bg-purple-600 hover:bg-purple-700 text-white font-black py-2.5 px-4 md:px-6 rounded-2xl text-xs md:text-base shadow-md active:scale-95 flex items-center gap-1.5 transition">
                             Langkah Berikutnya ⏭️
                         </button>
                     </div>
 
-                    <button id="btn-play-anim" onclick="toggleAutoPlayCooking()" class="bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white font-bold py-2 px-6 rounded-full text-sm md:text-base shadow-md transition-transform active:scale-95 flex items-center gap-2">
+                    <button id="btn-play-anim" onclick="toggleAutoPlayCooking()" class="bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white font-black py-2.5 px-6 md:px-8 rounded-2xl text-sm md:text-base shadow-lg transition-transform active:scale-95 flex items-center gap-2">
                         ▶️ Putar Semua Otomatis
                     </button>
                 </div>
@@ -886,29 +889,35 @@
                 step: 1,
                 text: "1. Siapkan semua alat dan bahan yang bersih di atas meja!",
                 render: () => `
-                    <div class="flex flex-wrap items-center justify-center gap-4 md:gap-6 px-4 anim-pop">
-                        <!-- Piring & Alat -->
-                        <div class="bg-white/90 p-3 rounded-2xl shadow-md text-center animate-float">
-                            <svg class="w-16 h-16 mx-auto" viewBox="0 0 120 100">
-                                <ellipse cx="60" cy="56" rx="44" ry="24" fill="#cbd5e1"/>
-                                <ellipse cx="60" cy="50" rx="46" ry="26" fill="#f8fafc" stroke="#0284c7" stroke-width="4"/>
-                                <ellipse cx="60" cy="51" rx="30" ry="16" fill="#e0f2fe" stroke="#7dd3fc" stroke-width="3"/>
+                    <div class="flex flex-wrap items-end justify-center gap-3 md:gap-8 px-4 anim-pop pb-1">
+                        <!-- Piring & Alat Bersih -->
+                        <div class="bg-white/95 p-3.5 md:p-5 rounded-3xl shadow-xl border-3 border-sky-300 text-center animate-float flex flex-col items-center">
+                            <svg class="w-18 h-14 md:w-28 md:h-20 mx-auto drop-shadow-sm" viewBox="0 0 120 100">
+                                <ellipse cx="60" cy="56" rx="46" ry="24" fill="#cbd5e1"/>
+                                <ellipse cx="60" cy="50" rx="48" ry="26" fill="#f8fafc" stroke="#0284c7" stroke-width="4"/>
+                                <ellipse cx="60" cy="51" rx="32" ry="16" fill="#e0f2fe" stroke="#7dd3fc" stroke-width="3"/>
+                                <path d="M35 50 L85 50" stroke="#38bdf8" stroke-width="2" stroke-dasharray="4 3"/>
                             </svg>
-                            <span class="text-xs font-bold text-gray-700">Piring & Alat</span>
+                            <span class="text-base md:text-xl font-black text-sky-900 mt-2 block">Piring & Alat</span>
+                            <span class="text-xs md:text-sm font-bold text-sky-700 bg-sky-100 px-2.5 py-0.5 rounded-full mt-1">Bersih & Rapi</span>
                         </div>
-                        <!-- Buah-buahan -->
-                        <div class="bg-white/90 p-3 rounded-2xl shadow-md text-center animate-bounce-slow">
-                            <div class="text-4xl md:text-5xl flex items-center justify-center gap-1">
+                        <!-- Buah Segar & Jeli -->
+                        <div class="bg-white/95 p-3.5 md:p-5 rounded-3xl shadow-xl border-3 border-emerald-300 text-center animate-bounce-slow flex flex-col items-center">
+                            <div class="text-4xl md:text-6xl flex items-center justify-center gap-1.5 drop-shadow-sm py-1">
                                 <span>🥭</span><span>🍊</span><span>🍈</span>
-                                <svg class="w-10 h-10 md:w-12 md:h-12 inline-block"><use href="#anggur-hijau"/></svg>
+                                <svg class="w-12 h-12 md:w-16 md:h-16 inline-block"><use href="#anggur-hijau"/></svg>
                                 <span>🍮</span>
                             </div>
-                            <span class="text-xs font-bold text-emerald-700">Buah Segar & Jeli</span>
+                            <span class="text-base md:text-xl font-black text-emerald-900 mt-2 block">Buah Segar & Jeli</span>
+                            <span class="text-xs md:text-sm font-bold text-emerald-700 bg-emerald-100 px-2.5 py-0.5 rounded-full mt-1">Dicuci Bersih</span>
                         </div>
-                        <!-- Saus & Keju -->
-                        <div class="bg-white/90 p-3 rounded-2xl shadow-md text-center animate-float">
-                            <div class="text-4xl md:text-5xl">🫙🥛🍯🥣🧀</div>
-                            <span class="text-xs font-bold text-amber-700">Saus & Keju</span>
+                        <!-- Saus Salad & Keju -->
+                        <div class="bg-white/95 p-3.5 md:p-5 rounded-3xl shadow-xl border-3 border-amber-300 text-center animate-float flex flex-col items-center">
+                            <div class="text-4xl md:text-6xl flex items-center justify-center gap-1.5 drop-shadow-sm py-1">
+                                <span>🫙</span><span>🥛</span><span>🍯</span><span>🥣</span><span>🧀</span>
+                            </div>
+                            <span class="text-base md:text-xl font-black text-amber-900 mt-2 block">Saus & Keju</span>
+                            <span class="text-xs md:text-sm font-bold text-amber-700 bg-amber-100 px-2.5 py-0.5 rounded-full mt-1">Lezat & Gurih</span>
                         </div>
                     </div>
                 `,
@@ -918,29 +927,29 @@
                 step: 2,
                 text: "2. Potong buah-buahan & jeli membentuk dadu kecil di atas piring!",
                 render: () => `
-                    <div class="relative w-80 h-56 flex items-center justify-center">
-                        <!-- Piring Besar -->
-                        <svg class="w-76 h-44 absolute bottom-1" viewBox="0 0 240 120">
+                    <div class="relative w-96 md:w-[460px] h-64 md:h-76 flex items-end justify-center pb-2">
+                        <!-- Piring Besar di atas meja -->
+                        <svg class="w-80 md:w-96 h-44 md:h-52 absolute bottom-0 drop-shadow-md" viewBox="0 0 240 120">
                             <ellipse cx="120" cy="74" rx="104" ry="36" fill="#94a3b8"/>
                             <ellipse cx="120" cy="66" rx="106" ry="38" fill="#ffffff" stroke="#0284c7" stroke-width="5"/>
                             <ellipse cx="120" cy="66" rx="96" ry="32" fill="none" stroke="#38bdf8" stroke-width="2.5" stroke-dasharray="8 5"/>
                             <ellipse cx="120" cy="68" rx="76" ry="24" fill="#f0f9ff" stroke="#bae6fd" stroke-width="4"/>
                         </svg>
-                        <!-- Buah Utuh di Kiri & Potongan Dadu di Kanan -->
-                        <div class="absolute bottom-14 left-16 text-4xl flex gap-1">🥭🍈</div>
-                        <!-- Potongan Dadu Warna-warni -->
-                        <div class="absolute bottom-12 right-14 grid grid-cols-4 gap-1 p-2">
-                            <div class="w-5 h-5 bg-amber-400 rounded border border-amber-600 shadow-sm animate-bounce"></div>
-                            <div class="w-5 h-5 bg-rose-500 rounded border border-rose-700 shadow-sm animate-bounce"></div>
-                            <div class="w-5 h-5 bg-lime-400 rounded border border-lime-600 shadow-sm animate-bounce"></div>
-                            <div class="w-5 h-5 bg-emerald-400 rounded border border-emerald-600 shadow-sm animate-bounce"></div>
-                            <div class="w-5 h-5 bg-orange-400 rounded border border-orange-600 shadow-sm"></div>
-                            <div class="w-5 h-5 bg-pink-400 rounded border border-pink-600 shadow-sm"></div>
-                            <div class="w-5 h-5 bg-amber-300 rounded border border-amber-500 shadow-sm"></div>
-                            <div class="w-5 h-5 bg-lime-300 rounded border border-lime-500 shadow-sm"></div>
+                        <!-- Buah Utuh di Kiri -->
+                        <div class="absolute bottom-16 md:bottom-20 left-8 md:left-14 text-4xl md:text-5xl flex gap-1.5 drop-shadow-sm">🥭🍈</div>
+                        <!-- Potongan Dadu Warna-warni di Kanan -->
+                        <div class="absolute bottom-14 md:bottom-18 right-8 md:right-14 grid grid-cols-4 gap-1.5 p-2">
+                            <div class="w-6 h-6 md:w-7 md:h-7 bg-amber-400 rounded-md border border-amber-600 shadow-sm animate-bounce"></div>
+                            <div class="w-6 h-6 md:w-7 md:h-7 bg-rose-500 rounded-md border border-rose-700 shadow-sm animate-bounce"></div>
+                            <div class="w-6 h-6 md:w-7 md:h-7 bg-lime-400 rounded-md border border-lime-600 shadow-sm animate-bounce"></div>
+                            <div class="w-6 h-6 md:w-7 md:h-7 bg-emerald-400 rounded-md border border-emerald-600 shadow-sm animate-bounce"></div>
+                            <div class="w-6 h-6 md:w-7 md:h-7 bg-orange-400 rounded-md border border-orange-600 shadow-sm"></div>
+                            <div class="w-6 h-6 md:w-7 md:h-7 bg-pink-400 rounded-md border border-pink-600 shadow-sm"></div>
+                            <div class="w-6 h-6 md:w-7 md:h-7 bg-amber-300 rounded-md border border-amber-500 shadow-sm"></div>
+                            <div class="w-6 h-6 md:w-7 md:h-7 bg-lime-300 rounded-md border border-lime-500 shadow-sm"></div>
                         </div>
                         <!-- Pisau Memotong -->
-                        <svg class="w-36 h-36 absolute top-2 left-28 anim-chop z-20" viewBox="0 0 120 100">
+                        <svg class="w-40 h-40 md:w-48 md:h-48 absolute top-0 left-28 md:left-36 anim-chop z-20 drop-shadow-lg" viewBox="0 0 120 100">
                             <path d="M15 45 L75 45 C75 45, 72 68, 15 62 Z" fill="#f1f5f9" stroke="#475569" stroke-width="3.5"/>
                             <rect x="75" y="42" width="32" height="14" rx="7" fill="#f43f5e" stroke="#be123c" stroke-width="3.5"/>
                         </svg>
@@ -954,24 +963,24 @@
                 step: 3,
                 text: "3. Masukkan potongan buah & jeli ke dalam baskom, lalu sisihkan!",
                 render: () => `
-                    <div class="relative w-80 h-60 flex items-center justify-center">
+                    <div class="relative w-96 md:w-[440px] h-64 md:h-76 flex items-end justify-center pb-2">
                         <!-- Potongan Buah Meluncur Masuk -->
-                        <div class="absolute top-2 flex gap-2 anim-drop z-10">
-                            <div class="w-6 h-6 bg-amber-400 rounded-md border border-amber-600"></div>
-                            <div class="w-6 h-6 bg-rose-500 rounded-md border border-rose-700"></div>
-                            <div class="w-6 h-6 bg-lime-400 rounded-md border border-lime-600"></div>
-                            <div class="w-6 h-6 bg-emerald-400 rounded-md border border-emerald-600"></div>
+                        <div class="absolute top-2 md:top-4 flex gap-3 anim-drop z-10">
+                            <div class="w-7 h-7 md:w-8 md:h-8 bg-amber-400 rounded-lg border-2 border-amber-600 shadow-md"></div>
+                            <div class="w-7 h-7 md:w-8 md:h-8 bg-rose-500 rounded-lg border-2 border-rose-700 shadow-md"></div>
+                            <div class="w-7 h-7 md:w-8 md:h-8 bg-lime-400 rounded-lg border-2 border-lime-600 shadow-md"></div>
+                            <div class="w-7 h-7 md:w-8 md:h-8 bg-emerald-400 rounded-lg border-2 border-emerald-600 shadow-md"></div>
                         </div>
                         <!-- Baskom Biru Besar -->
-                        <svg class="w-56 h-44 absolute bottom-2 z-20" viewBox="0 0 140 100">
+                        <svg class="w-64 md:w-80 h-48 md:h-56 absolute bottom-0 z-20 drop-shadow-xl" viewBox="0 0 140 100">
                             <ellipse cx="70" cy="30" rx="58" ry="15" fill="#bae6fd" stroke="#0284c7" stroke-width="4"/>
                             <!-- Tumpukan buah di dalam baskom -->
                             <g>
-                                <rect x="35" y="20" width="12" height="12" rx="3" fill="#f59e0b"/>
-                                <rect x="50" y="18" width="12" height="12" rx="3" fill="#e11d48"/>
-                                <rect x="65" y="21" width="12" height="12" rx="3" fill="#84cc16"/>
-                                <rect x="80" y="19" width="12" height="12" rx="3" fill="#4ade80"/>
-                                <rect x="92" y="22" width="12" height="12" rx="3" fill="#fb923c"/>
+                                <rect x="35" y="20" width="14" height="14" rx="3" fill="#f59e0b"/>
+                                <rect x="52" y="18" width="14" height="14" rx="3" fill="#e11d48"/>
+                                <rect x="68" y="21" width="14" height="14" rx="3" fill="#84cc16"/>
+                                <rect x="84" y="19" width="14" height="14" rx="3" fill="#4ade80"/>
+                                <rect x="96" y="22" width="14" height="14" rx="3" fill="#fb923c"/>
                             </g>
                             <path d="M12 30 C12 82, 38 92, 70 92 C102 92, 128 82, 128 30 Z" fill="#0ea5e9" stroke="#0284c7" stroke-width="4"/>
                             <path d="M32 52 Q50 75 78 76" stroke="#bae6fd" stroke-width="4" stroke-linecap="round" fill="none"/>
@@ -986,23 +995,23 @@
                 step: 4,
                 text: "4. Buat saus salad: campurkan mayonais, susu kental manis, madu, dan yoghurt!",
                 render: () => `
-                    <div class="relative w-96 h-60 flex items-center justify-center">
+                    <div class="relative w-96 md:w-[480px] h-64 md:h-76 flex items-end justify-center pb-2">
                         <!-- Bahan-bahan Saus Menuang ke Mangkuk -->
-                        <div class="absolute top-2 flex gap-5 items-center animate-bounce">
-                            <div class="bg-white px-2.5 py-1.5 rounded-xl shadow border border-amber-300 text-xs font-bold flex items-center gap-1">🫙 Mayonais</div>
-                            <div class="bg-white px-2.5 py-1.5 rounded-xl shadow border border-sky-300 text-xs font-bold flex items-center gap-1">🥛 Susu</div>
-                            <div class="bg-white px-2.5 py-1.5 rounded-xl shadow border border-yellow-400 text-xs font-bold flex items-center gap-1">🍯 Madu</div>
-                            <div class="bg-white px-2.5 py-1.5 rounded-xl shadow border border-indigo-300 text-xs font-bold flex items-center gap-1">🥣 Yoghurt</div>
+                        <div class="absolute top-0 flex gap-2 md:gap-3 items-center animate-bounce z-10 flex-wrap justify-center">
+                            <div class="bg-white/95 px-3 py-1.5 rounded-2xl shadow-md border-2 border-amber-300 text-xs md:text-sm font-black flex items-center gap-1.5 text-gray-800">🫙 Mayonais</div>
+                            <div class="bg-white/95 px-3 py-1.5 rounded-2xl shadow-md border-2 border-sky-300 text-xs md:text-sm font-black flex items-center gap-1.5 text-gray-800">🥛 Susu</div>
+                            <div class="bg-white/95 px-3 py-1.5 rounded-2xl shadow-md border-2 border-yellow-400 text-xs md:text-sm font-black flex items-center gap-1.5 text-gray-800">🍯 Madu</div>
+                            <div class="bg-white/95 px-3 py-1.5 rounded-2xl shadow-md border-2 border-indigo-300 text-xs md:text-sm font-black flex items-center gap-1.5 text-gray-800">🥣 Yoghurt</div>
                         </div>
                         <!-- Tetesan Saus Krim & Madu Mengalir Masuk -->
-                        <div class="absolute top-14 flex gap-4 anim-drop">
-                            <div class="w-4 h-6 bg-amber-100 rounded-full border border-amber-300 shadow"></div>
-                            <div class="w-4 h-6 bg-white rounded-full border border-sky-200 shadow"></div>
-                            <div class="w-4 h-6 bg-amber-400 rounded-full border border-amber-500 shadow"></div>
-                            <div class="w-4 h-6 bg-indigo-50 rounded-full border border-indigo-200 shadow"></div>
+                        <div class="absolute top-16 md:top-20 flex gap-6 anim-drop z-10">
+                            <div class="w-5 h-7 md:w-6 md:h-8 bg-amber-100 rounded-full border border-amber-300 shadow"></div>
+                            <div class="w-5 h-7 md:w-6 md:h-8 bg-white rounded-full border border-sky-200 shadow"></div>
+                            <div class="w-5 h-7 md:w-6 md:h-8 bg-amber-400 rounded-full border border-amber-500 shadow"></div>
+                            <div class="w-5 h-7 md:w-6 md:h-8 bg-indigo-50 rounded-full border border-indigo-200 shadow"></div>
                         </div>
                         <!-- Mangkuk Saus Salad -->
-                        <svg class="w-52 h-40 absolute bottom-2" viewBox="0 0 140 100">
+                        <svg class="w-64 md:w-80 h-48 md:h-56 absolute bottom-0 drop-shadow-xl z-20" viewBox="0 0 140 100">
                             <ellipse cx="70" cy="34" rx="54" ry="14" fill="#fef3c7" stroke="#d97706" stroke-width="4"/>
                             <ellipse cx="70" cy="36" rx="46" ry="10" fill="#fffbeb"/>
                             <path d="M16 34 C16 80, 42 88, 70 88 C98 88, 124 80, 124 34 Z" fill="#fde68a" stroke="#d97706" stroke-width="4"/>
@@ -1017,19 +1026,19 @@
                 step: 5,
                 text: "5. Aduk saus salad menggunakan sendok makan hingga rata dan tercampur semua!",
                 render: () => `
-                    <div class="relative w-80 h-60 flex items-center justify-center">
+                    <div class="relative w-96 md:w-[440px] h-64 md:h-76 flex items-end justify-center pb-2">
                         <!-- Sendok Makan Mengaduk -->
-                        <svg class="w-32 h-32 absolute top-4 z-10 anim-stir" viewBox="0 0 100 100">
+                        <svg class="w-36 h-36 md:w-44 md:h-44 absolute top-2 md:top-4 z-10 anim-stir drop-shadow-md" viewBox="0 0 100 100">
                             <rect x="44" y="8" width="12" height="58" rx="6" fill="#94a3b8" stroke="#475569" stroke-width="3"/>
                             <ellipse cx="50" cy="70" rx="18" ry="22" fill="#e2e8f0" stroke="#475569" stroke-width="3"/>
                         </svg>
                         <!-- Mangkuk Saus Putih Creamy -->
-                        <svg class="w-56 h-40 absolute bottom-2 z-20" viewBox="0 0 140 100">
+                        <svg class="w-64 md:w-80 h-48 md:h-56 absolute bottom-0 z-20 drop-shadow-xl" viewBox="0 0 140 100">
                             <ellipse cx="70" cy="34" rx="54" ry="15" fill="#fffbeb" stroke="#d97706" stroke-width="4"/>
                             <!-- Pusaran Saus Creamy -->
                             <path d="M35 34 Q70 42 105 34 Q70 26 35 34" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
                             <path d="M16 34 C16 80, 42 90, 70 90 C98 90, 124 80, 124 34 Z" fill="#fde68a" stroke="#d97706" stroke-width="4"/>
-                            <text x="70" y="68" text-anchor="middle" fill="#b45309" font-size="13" font-weight="bold">Saus Salad Creamy</text>
+                            <text x="70" y="68" text-anchor="middle" fill="#b45309" font-size="13" font-weight="900">Saus Salad Creamy</text>
                         </svg>
                     </div>
                 `,
@@ -1041,10 +1050,10 @@
                 step: 6,
                 text: "6. Lakukan tes rasa! Jika kurang pas, bisa ditambah sesuai selera. Yummy!",
                 render: () => `
-                    <div class="flex flex-col items-center justify-center anim-pop">
-                        <div class="text-7xl md:text-8xl mb-2 animate-bounce">😋🥄✨</div>
-                        <div class="bg-white px-5 py-2 rounded-full shadow-md border-2 border-pink-300 text-pink-600 font-bold text-base md:text-lg">
-                            "Hmm.. Manis, lembut, dan segar sekali!"
+                    <div class="flex flex-col items-center justify-end pb-4 anim-pop">
+                        <div class="text-8xl md:text-9xl mb-4 animate-bounce drop-shadow-lg">😋🥄✨</div>
+                        <div class="bg-white/95 px-6 md:px-8 py-3 rounded-full shadow-xl border-3 border-pink-300 text-pink-600 font-black text-lg md:text-2xl text-center">
+                            "Hmm.. Manis, lembut, dan segar sekali! 👍"
                         </div>
                     </div>
                 `,
@@ -1054,58 +1063,61 @@
                 step: 7,
                 text: "7. Campurkan & ambil potongan buah dengan centong ke dalam gelas saji!",
                 render: () => `
-                    <div class="relative w-96 h-60 flex items-center justify-center gap-8">
+                    <div class="relative w-96 md:w-[480px] h-64 md:h-76 flex items-end justify-center gap-6 pb-2">
                         <!-- Baskom Buah di Kiri -->
-                        <svg class="w-36 h-32 absolute left-4 bottom-2" viewBox="0 0 140 100">
-                            <ellipse cx="70" cy="30" rx="55" ry="14" fill="#bae6fd" stroke="#0284c7" stroke-width="4"/>
-                            <path d="M15 30 C15 78, 40 88, 70 88 C100 88, 125 78, 125 30 Z" fill="#0ea5e9" stroke="#0284c7" stroke-width="4"/>
+                        <svg class="w-40 md:w-48 h-36 md:h-44 absolute left-2 md:left-6 bottom-0 drop-shadow-md" viewBox="0 0 140 100">
+                            <ellipse cx="70" cy="30" rx="58" ry="15" fill="#bae6fd" stroke="#0284c7" stroke-width="4"/>
+                            <g>
+                                <rect x="40" y="22" width="12" height="12" rx="3" fill="#f59e0b"/>
+                                <rect x="58" y="20" width="12" height="12" rx="3" fill="#e11d48"/>
+                                <rect x="74" y="23" width="12" height="12" rx="3" fill="#84cc16"/>
+                            </g>
+                            <path d="M12 30 C12 82, 38 92, 70 92 C102 92, 128 82, 128 30 Z" fill="#0ea5e9" stroke="#0284c7" stroke-width="4"/>
                         </svg>
-                        <!-- Sendok Sayur / Centong Mengambil Buah -->
-                        <div class="absolute top-6 left-32 z-30 anim-ladle flex items-center">
-                            <svg class="w-28 h-24" viewBox="0 0 120 100">
-                                <path d="M62 60 L92 18 C95 14, 102 18, 98 24 L70 65" fill="#f472b6" stroke="#be185d" stroke-width="4"/>
-                                <path d="M20 55 C20 86, 72 86, 72 55 Z" fill="#ec4899" stroke="#be185d" stroke-width="4"/>
-                                <rect x="30" y="42" width="12" height="12" rx="2" fill="#f59e0b"/>
-                                <rect x="44" y="40" width="12" height="12" rx="2" fill="#e11d48"/>
-                                <rect x="38" y="32" width="12" height="12" rx="2" fill="#84cc16"/>
+                        <!-- Centong Mengambil Buah Terbang -->
+                        <div class="absolute top-4 left-32 md:left-40 anim-scoop z-30 drop-shadow-md">
+                            <svg class="w-24 h-24 md:w-28 md:h-28" viewBox="0 0 100 100">
+                                <rect x="56" y="8" width="8" height="50" rx="4" fill="#f43f5e" stroke="#be123c" stroke-width="2" transform="rotate(-30 56 8)"/>
+                                <circle cx="36" cy="64" r="18" fill="#fda4af" stroke="#f43f5e" stroke-width="3"/>
+                                <rect x="30" y="58" width="10" height="10" rx="2" fill="#f59e0b"/>
+                                <rect x="34" y="60" width="8" height="8" rx="2" fill="#84cc16"/>
                             </svg>
                         </div>
-                        <!-- Gelas Saji Bening Terisi Buah di Kanan -->
-                        <svg class="w-40 h-48 absolute right-8 bottom-1 z-20" viewBox="0 0 120 130">
-                            <path d="M26 20 L36 112 C38 120, 82 120, 84 112 L94 20 Z" fill="#e0f2fe" fill-opacity="0.65" stroke="#0284c7" stroke-width="4"/>
-                            <!-- Potongan Buah Warna-warni di Dalam Gelas -->
+                        <!-- Gelas Saji di Kanan -->
+                        <svg class="w-36 md:w-44 h-48 md:h-56 absolute right-4 md:right-8 bottom-0 drop-shadow-lg" viewBox="0 0 100 120">
+                            <path d="M20 20 L28 104 C30 112, 70 112, 72 104 L80 20 Z" fill="#e0f2fe" fill-opacity="0.7" stroke="#0284c7" stroke-width="4"/>
                             <g>
-                                <rect x="38" y="88" width="14" height="14" rx="3" fill="#f59e0b"/>
-                                <rect x="54" y="90" width="14" height="14" rx="3" fill="#e11d48"/>
-                                <rect x="68" y="87" width="13" height="14" rx="3" fill="#84cc16"/>
-                                <rect x="36" y="72" width="15" height="14" rx="3" fill="#9333ea"/>
-                                <rect x="52" y="73" width="15" height="14" rx="3" fill="#fb923c"/>
-                                <rect x="68" y="71" width="14" height="14" rx="3" fill="#f43f5e"/>
-                                <rect x="40" y="56" width="15" height="14" rx="3" fill="#84cc16"/>
-                                <rect x="57" y="57" width="15" height="14" rx="3" fill="#f59e0b"/>
+                                <rect x="32" y="82" width="14" height="14" rx="3" fill="#f59e0b"/>
+                                <rect x="48" y="84" width="14" height="14" rx="3" fill="#e11d48"/>
+                                <rect x="40" y="68" width="14" height="14" rx="3" fill="#84cc16"/>
+                                <rect x="56" y="69" width="14" height="14" rx="3" fill="#fb923c"/>
                             </g>
-                            <ellipse cx="60" cy="20" rx="34" ry="7" fill="none" stroke="#0284c7" stroke-width="4"/>
+                            <ellipse cx="50" cy="20" rx="30" ry="7" fill="none" stroke="#0284c7" stroke-width="4"/>
                         </svg>
                     </div>
                 `,
                 sfx: () => {
-                    stepSfxInterval = setInterval(playPopSFX, 500);
+                    stepSfxInterval = setInterval(playPopSFX, 400);
                 }
             },
             {
                 step: 8,
                 text: "8. Tuangkan saus salad secukupnya di atas buah potong di dalam gelas!",
                 render: () => `
-                    <div class="relative w-80 h-60 flex items-center justify-center">
-                        <!-- Aliran Saus Creamy Mengalir ke Gelas -->
-                        <div class="absolute top-2 z-20 flex flex-col items-center">
-                            <div class="bg-amber-100 border-2 border-amber-400 px-3 py-1 rounded-full text-xs font-bold text-amber-900 shadow">🥣 Tuang Saus Salad</div>
-                            <div class="w-8 h-24 bg-gradient-to-b from-amber-50 to-yellow-100 rounded-full animate-pulse border-x-2 border-amber-200"></div>
+                    <div class="relative w-96 md:w-[480px] h-64 md:h-76 flex items-end justify-center pb-2">
+                        <!-- Mangkuk Menuang Saus dari Atas -->
+                        <div class="absolute top-2 left-16 md:left-24 anim-tilt z-20 drop-shadow-lg">
+                            <svg class="w-36 md:w-44 h-28 md:h-34" viewBox="0 0 140 100">
+                                <ellipse cx="70" cy="34" rx="54" ry="14" fill="#fef3c7" stroke="#d97706" stroke-width="4"/>
+                                <ellipse cx="70" cy="36" rx="46" ry="10" fill="#fffbeb"/>
+                                <path d="M16 34 C16 80, 42 88, 70 88 C98 88, 124 80, 124 34 Z" fill="#fde68a" stroke="#d97706" stroke-width="4"/>
+                            </svg>
                         </div>
-                        <!-- Gelas Saji dengan Buah + Lapisan Saus Salad -->
-                        <svg class="w-44 h-48 absolute bottom-1 z-20" viewBox="0 0 120 130">
-                            <path d="M26 20 L36 112 C38 120, 82 120, 84 112 L94 20 Z" fill="#e0f2fe" fill-opacity="0.65" stroke="#0284c7" stroke-width="4"/>
-                            <!-- Buah Potong -->
+                        <!-- Aliran Saus Mengalir ke Gelas -->
+                        <div class="absolute top-24 md:top-28 left-40 md:left-52 w-6 md:w-7 h-16 md:h-20 bg-amber-100 border-x-2 border-amber-300 rounded-full z-15 anim-drop"></div>
+                        <!-- Gelas Salad Buah -->
+                        <svg class="w-40 md:w-48 h-52 md:h-60 absolute bottom-0 drop-shadow-xl z-10" viewBox="0 0 120 130">
+                            <path d="M26 24 L36 112 C38 120, 82 120, 84 112 L94 24 Z" fill="#e0f2fe" fill-opacity="0.7" stroke="#0284c7" stroke-width="4"/>
                             <g>
                                 <rect x="38" y="88" width="14" height="14" rx="3" fill="#f59e0b"/>
                                 <rect x="54" y="90" width="14" height="14" rx="3" fill="#e11d48"/>
@@ -1113,13 +1125,9 @@
                                 <rect x="36" y="72" width="15" height="14" rx="3" fill="#9333ea"/>
                                 <rect x="52" y="73" width="15" height="14" rx="3" fill="#fb923c"/>
                                 <rect x="68" y="71" width="14" height="14" rx="3" fill="#f43f5e"/>
-                                <rect x="36" y="56" width="15" height="14" rx="3" fill="#84cc16"/>
-                                <rect x="53" y="57" width="15" height="14" rx="3" fill="#f59e0b"/>
-                                <rect x="69" y="56" width="14" height="14" rx="3" fill="#e11d48"/>
                             </g>
-                            <!-- Lapisan Saus Salad Creamy di Atas Buah -->
-                            <path d="M31 44 Q60 38 89 44 L86 64 Q72 72 60 62 Q48 72 34 64 Z" fill="#fffbeb" stroke="#fde68a" stroke-width="2"/>
-                            <ellipse cx="60" cy="20" rx="34" ry="7" fill="none" stroke="#0284c7" stroke-width="4"/>
+                            <path d="M33 52 Q60 46 87 52 L84 68 Q60 76 36 68 Z" fill="#fffbeb" stroke="#fde68a" stroke-width="2"/>
+                            <ellipse cx="60" cy="24" rx="34" ry="7" fill="none" stroke="#0284c7" stroke-width="4"/>
                         </svg>
                     </div>
                 `,
@@ -1131,29 +1139,30 @@
                 step: 9,
                 text: "9. Beri taburan keju cheddar yang diparut menggunakan parutan keju!",
                 render: () => `
-                    <div class="relative w-80 h-60 flex items-center justify-center">
-                        <!-- Alat Parutan Keju & Balok Keju Bergerak di Atas Gelas -->
-                        <div class="absolute top-1 z-30 flex items-center">
-                            <!-- Parutan Logam -->
-                            <svg class="w-24 h-20 transform -rotate-12" viewBox="0 0 120 100">
-                                <path d="M44 24 V14 C44 9, 76 9, 76 14 V24" fill="none" stroke="#ef4444" stroke-width="7"/>
-                                <polygon points="36,24 84,24 94,86 26,86" fill="#e2e8f0" stroke="#475569" stroke-width="4"/>
-                                <circle cx="50" cy="45" r="3" fill="#475569"/><circle cx="65" cy="45" r="3" fill="#475569"/>
-                                <circle cx="48" cy="62" r="3" fill="#475569"/><circle cx="68" cy="62" r="3" fill="#475569"/>
+                    <div class="relative w-96 md:w-[480px] h-64 md:h-76 flex items-end justify-center pb-2">
+                        <!-- Parutan Keju & Keju di Atas Gelas -->
+                        <div class="absolute top-0 left-20 md:left-28 anim-grate z-30 drop-shadow-md">
+                            <span class="text-4xl md:text-5xl absolute -top-2 -left-6 transform -rotate-12">🧀</span>
+                            <svg class="w-28 h-36 md:w-32 md:h-40" viewBox="0 0 100 120">
+                                <path d="M30 30 L40 105 L60 105 L70 30 Z" fill="#e2e8f0" stroke="#475569" stroke-width="3"/>
+                                <circle cx="50" cy="18" r="10" fill="none" stroke="#ef4444" stroke-width="5"/>
+                                <g fill="#475569">
+                                    <circle cx="46" cy="45" r="2"/><circle cx="54" cy="45" r="2"/>
+                                    <circle cx="43" cy="60" r="2"/><circle cx="50" cy="60" r="2"/><circle cx="57" cy="60" r="2"/>
+                                    <circle cx="45" cy="75" r="2"/><circle cx="55" cy="75" r="2"/>
+                                    <circle cx="44" cy="90" r="2"/><circle cx="51" cy="90" r="2"/><circle cx="58" cy="90" r="2"/>
+                                </g>
                             </svg>
-                            <!-- Keju Digosok -->
-                            <div class="text-4xl -ml-8 anim-rub-cheese">🧀</div>
                         </div>
-                        <!-- Serutan Keju Berjatuhan -->
-                        <div class="absolute top-20 z-20 flex gap-2 anim-drop">
-                            <div class="w-2 h-5 bg-yellow-300 rounded-full border border-yellow-500"></div>
-                            <div class="w-2 h-5 bg-yellow-400 rounded-full border border-yellow-500"></div>
-                            <div class="w-2 h-5 bg-yellow-300 rounded-full border border-yellow-500"></div>
-                            <div class="w-2 h-5 bg-yellow-400 rounded-full border border-yellow-500"></div>
+                        <!-- Parutan Keju Kuning Jatuh -->
+                        <div class="absolute top-28 md:top-32 left-44 md:left-56 flex flex-col gap-1 anim-drop z-25">
+                            <div class="w-6 h-2 bg-yellow-300 rounded-full border border-yellow-500 transform rotate-12"></div>
+                            <div class="w-7 h-2 bg-yellow-400 rounded-full border border-yellow-600 transform -rotate-6"></div>
+                            <div class="w-5 h-2 bg-yellow-300 rounded-full border border-yellow-500 transform rotate-45"></div>
                         </div>
-                        <!-- Gelas Saji Lengkap -->
-                        <svg class="w-44 h-48 absolute bottom-1 z-10" viewBox="0 0 120 130">
-                            <path d="M26 20 L36 112 C38 120, 82 120, 84 112 L94 20 Z" fill="#e0f2fe" fill-opacity="0.65" stroke="#0284c7" stroke-width="4"/>
+                        <!-- Gelas Salad Buah dengan Saus & Keju -->
+                        <svg class="w-40 md:w-48 h-52 md:h-60 absolute bottom-0 drop-shadow-xl z-20" viewBox="0 0 120 130">
+                            <path d="M26 24 L36 112 C38 120, 82 120, 84 112 L94 24 Z" fill="#e0f2fe" fill-opacity="0.7" stroke="#0284c7" stroke-width="4"/>
                             <g>
                                 <rect x="38" y="88" width="14" height="14" rx="3" fill="#f59e0b"/>
                                 <rect x="54" y="90" width="14" height="14" rx="3" fill="#e11d48"/>
@@ -1187,10 +1196,10 @@
                 step: 10,
                 text: "10. Selesai! Salad buah yang sehat & lezat siap dinikmati bersama-sama! 🎉",
                 render: () => `
-                    <div class="relative flex flex-col items-center justify-center anim-pop">
+                    <div class="relative flex flex-col items-center justify-end pb-3 anim-pop">
                         <!-- Gelas Salad Buah Jadi & Berkilau -->
-                        <svg class="w-48 h-52 anim-glow" viewBox="0 0 120 130">
-                            <path d="M26 24 L36 112 C38 120, 82 120, 84 112 L94 24 Z" fill="#e0f2fe" fill-opacity="0.75" stroke="#0284c7" stroke-width="4"/>
+                        <svg class="w-52 h-56 md:w-64 md:h-70 anim-glow drop-shadow-2xl" viewBox="0 0 120 130">
+                            <path d="M26 24 L36 112 C38 120, 82 120, 84 112 L94 24 Z" fill="#e0f2fe" fill-opacity="0.8" stroke="#0284c7" stroke-width="4"/>
                             <g>
                                 <rect x="38" y="88" width="14" height="14" rx="3" fill="#f59e0b"/>
                                 <rect x="54" y="90" width="14" height="14" rx="3" fill="#e11d48"/>
@@ -1213,10 +1222,10 @@
                                 <rect x="57" y="38" width="14" height="5" rx="2"/>
                             </g>
                             <!-- Hiasan Buah Ceri/Anggur di Puncak -->
-                            <circle cx="60" cy="26" r="8" fill="#e11d48" stroke="#9f1239" stroke-width="2"/>
+                            <circle cx="60" cy="26" r="9" fill="#e11d48" stroke="#9f1239" stroke-width="2.5"/>
                             <ellipse cx="60" cy="24" rx="34" ry="6" fill="none" stroke="#0284c7" stroke-width="4"/>
                         </svg>
-                        <div class="bg-gradient-to-r from-pink-500 to-amber-500 text-white font-bold px-5 py-1.5 rounded-full shadow-lg text-sm md:text-base -mt-2">
+                        <div class="bg-gradient-to-r from-pink-500 via-rose-500 to-amber-500 text-white font-black px-6 md:px-8 py-2 md:py-2.5 rounded-full shadow-2xl text-base md:text-xl -mt-3 z-30 border-2 border-white">
                             ✨ Salad Buah Mama Shanum Siap! ✨
                         </div>
                     </div>
@@ -1236,7 +1245,7 @@
             document.querySelectorAll('.confetti').forEach(el => el.remove());
         }
 
-        function renderCookingStep(stepNumber) {
+                function renderCookingStep(stepNumber) {
             clearStepIntervals();
             currentCookingStep = stepNumber;
             const data = cookingStepsData[stepNumber - 1];
@@ -1248,15 +1257,17 @@
             const pills = document.querySelectorAll('#step-pills .step-pill');
             pills.forEach((pill, idx) => {
                 if (idx + 1 === stepNumber) {
-                    pill.className = "step-pill w-7 h-7 md:w-8 md:h-8 rounded-full font-bold text-xs md:text-sm bg-yellow-400 text-purple-900 shadow scale-110 transition";
+                    pill.className = "step-pill w-8 h-8 md:w-10 md:h-10 rounded-full font-black text-xs md:text-base bg-yellow-400 text-purple-950 shadow-md scale-110 transition border-2 border-yellow-200";
                 } else if (idx + 1 < stepNumber) {
-                    pill.className = "step-pill w-7 h-7 md:w-8 md:h-8 rounded-full font-bold text-xs md:text-sm bg-emerald-400 text-emerald-950 transition";
+                    pill.className = "step-pill w-8 h-8 md:w-10 md:h-10 rounded-full font-black text-xs md:text-base bg-emerald-400 text-emerald-950 transition border border-emerald-300";
                 } else {
-                    pill.className = "step-pill w-7 h-7 md:w-8 md:h-8 rounded-full font-bold text-xs md:text-sm bg-purple-400 text-white opacity-80 transition";
+                    pill.className = "step-pill w-8 h-8 md:w-10 md:h-10 rounded-full font-black text-xs md:text-base bg-purple-400/90 text-white opacity-90 transition border border-purple-300";
                 }
             });
 
-            if (data.sfx) data.sfx();
+            if (data.sfx) {
+                data.sfx();
+            }
         }
 
         function goToCookingStep(stepNumber) {
