@@ -10,8 +10,7 @@
     
     <!-- Tone.js untuk Musik & Efek Suara -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
-    <!-- Paho MQTT WebSocket Client untuk Remote Real-Time -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js"></script>
+
     
     <!-- Google Fonts: Fredoka untuk kesan ceria anak-anak -->
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -1286,17 +1285,17 @@
 
         updateUI();
 
-        // --- 4. Sistem Remote iPhone (MQTT Real-Time over WebSocket) ---
-        let mqttClient = null;
+        // --- 4. Sistem Remote iPhone (Pure HTTPS Port 443 / Server-Sent Events) ---
+        let sseSource = null;
         const urlParams = new URLSearchParams(window.location.search);
         const remoteTargetId = urlParams.get('remote');
 
-        // Buat ID Ruangan unik untuk iPad
+        // ID Ruangan unik untuk iPad
         const myRoomId = 'sb-' + Math.floor(100000 + Math.random() * 900000);
         const currentBaseUrl = window.location.origin + window.location.pathname;
         const myRemoteUrl = `${currentBaseUrl}?remote=${myRoomId}`;
 
-        // Render QR Code LANGSUNG TANPA MENUNGGU KONEKSI
+        // Render QR Code SECARA LANGSUNG (Synchronous)
         function renderInstantQR() {
             const container = document.getElementById('qrcode-container');
             const linkBtn = document.getElementById('remote-link-btn');
@@ -1341,106 +1340,76 @@
             if (modal) modal.classList.add('hidden');
         }
 
-        // Koneksi iPad ke broker MQTT HiveMQ
+        // Koneksi iPad via HTTPS Port 443 (Tembus Semua Hotspot Seluler)
         function initRemoteHost() {
-            try {
-                const clientId = "ipad_" + Math.random().toString(36).substring(2, 8);
-                mqttClient = new Paho.MQTT.Client("broker.hivemq.com", 8884, "/mqtt", clientId);
+            const statusEl = document.getElementById('remote-host-status');
+            const topic = 'salad_tk_' + myRoomId;
 
-                mqttClient.onConnectionLost = (responseObject) => {
-                    const statusEl = document.getElementById('remote-host-status');
+            if (sseSource) {
+                sseSource.close();
+            }
+
+            try {
+                sseSource = new EventSource(`https://ntfy.sh/${topic}/sse`);
+
+                sseSource.onopen = () => {
+                    console.log("iPad connected via HTTPS SSE on port 443!");
                     if (statusEl) {
-                        statusEl.innerText = "🟡 Menghubungkan ulang...";
-                        statusEl.className = "text-xs font-semibold text-amber-700 bg-amber-100 py-1.5 px-3 rounded-full mb-3 inline-block";
+                        statusEl.innerText = "🟢 Siap di-scan oleh kamera iPhone";
+                        statusEl.className = "text-xs font-semibold text-emerald-700 bg-emerald-100 py-1.5 px-3 rounded-full mb-3 inline-block";
                     }
-                    setTimeout(initRemoteHost, 3000);
                 };
 
-                mqttClient.onMessageArrived = (message) => {
+                sseSource.onmessage = (event) => {
                     try {
-                        const data = JSON.parse(message.payloadString);
-                        if (data.type === 'hello') {
-                            const statusEl = document.getElementById('remote-host-status');
-                            if (statusEl) {
-                                statusEl.innerText = "🟢 iPhone Terhubung!";
-                                statusEl.className = "text-xs font-semibold text-emerald-700 bg-emerald-100 py-1.5 px-3 rounded-full mb-3 inline-block";
+                        const parsed = JSON.parse(event.data);
+                        if (parsed.event === 'message') {
+                            const data = JSON.parse(parsed.message);
+                            if (data.type === 'hello') {
+                                if (statusEl) {
+                                    statusEl.innerText = "🟢 iPhone Terhubung!";
+                                    statusEl.className = "text-xs font-semibold text-emerald-700 bg-emerald-100 py-1.5 px-3 rounded-full mb-3 inline-block";
+                                }
+                            } else {
+                                handleRemoteCommand(data);
                             }
-                        } else {
-                            handleRemoteCommand(data);
                         }
                     } catch (e) {
-                        console.error(e);
+                        console.error("SSE parse error:", e);
                     }
                 };
 
-                mqttClient.connect({
-                    useSSL: true,
-                    timeout: 8,
-                    onSuccess: () => {
-                        console.log("iPad MQTT Connected to HiveMQ!");
-                        mqttClient.subscribe("salad_buah_tk/" + myRoomId);
-                        const statusEl = document.getElementById('remote-host-status');
-                        if (statusEl) {
-                            statusEl.innerText = "🟡 Siap di-scan oleh kamera iPhone";
-                            statusEl.className = "text-xs font-semibold text-sky-700 bg-sky-100 py-1.5 px-3 rounded-full mb-3 inline-block";
-                        }
-                    },
-                    onFailure: (err) => {
-                        console.error("Host connection failed:", err);
-                        setTimeout(initRemoteHost, 3000);
-                    }
-                });
+                sseSource.onerror = (e) => {
+                    console.log("SSE note:", e);
+                };
             } catch (err) {
-                console.error("MQTT Host error:", err);
+                console.error("SSE init error:", err);
             }
         }
 
-        // Koneksi iPhone ke broker MQTT HiveMQ
+        // Koneksi iPhone via HTTPS Port 443 POST
         function initRemoteClient(targetRoom) {
             const statusEl = document.getElementById('remote-client-status');
-            try {
-                const clientId = "iphone_" + Math.random().toString(36).substring(2, 8);
-                mqttClient = new Paho.MQTT.Client("broker.hivemq.com", 8884, "/mqtt", clientId);
-
-                mqttClient.onConnectionLost = () => {
-                    if (statusEl) {
-                        statusEl.innerText = "🔴 Koneksi terputus, menghubungkan ulang...";
-                        statusEl.className = "mt-2 inline-flex items-center gap-1.5 px-3 py-1 bg-rose-100 text-rose-800 text-xs font-bold rounded-full";
-                    }
-                    setTimeout(() => initRemoteClient(targetRoom), 2000);
-                };
-
-                mqttClient.connect({
-                    useSSL: true,
-                    timeout: 8,
-                    onSuccess: () => {
-                        if (statusEl) {
-                            statusEl.innerText = "🟢 Terhubung ke iPad!";
-                            statusEl.className = "mt-2 inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-100 text-emerald-800 text-xs font-bold rounded-full";
-                        }
-                        sendRemote('hello');
-                    },
-                    onFailure: (err) => {
-                        console.error("Client connect failed:", err);
-                        if (statusEl) {
-                            statusEl.innerText = "⚠️ Menghubungkan ulang...";
-                            statusEl.className = "mt-2 inline-flex items-center gap-1.5 px-3 py-1 bg-amber-100 text-amber-800 text-xs font-bold rounded-full";
-                        }
-                        setTimeout(() => initRemoteClient(targetRoom), 3000);
-                    }
-                });
-            } catch (err) {
-                console.error("MQTT Client error:", err);
+            if (statusEl) {
+                statusEl.innerText = "🟢 Terhubung ke iPad!";
+                statusEl.className = "mt-2 inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-100 text-emerald-800 text-xs font-bold rounded-full";
             }
+            sendRemote('hello');
         }
 
-        function sendRemote(action) {
-            if (mqttClient && mqttClient.isConnected()) {
-                const payload = (action === 'hello') ? { type: 'hello' } : { action: action };
-                const message = new Paho.MQTT.Message(JSON.stringify(payload));
-                message.destinationName = "salad_buah_tk/" + remoteTargetId;
-                mqttClient.send(message);
-                if (navigator.vibrate) navigator.vibrate(40);
+        async function sendRemote(action) {
+            if (navigator.vibrate) navigator.vibrate(40);
+            const payload = (action === 'hello') ? { type: 'hello' } : { action: action };
+            const topic = 'salad_tk_' + remoteTargetId;
+
+            try {
+                await fetch(`https://ntfy.sh/${topic}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+            } catch (err) {
+                console.error("Send remote error:", err);
             }
         }
 
