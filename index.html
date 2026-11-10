@@ -146,126 +146,32 @@
 </head>
 <body class="h-screen w-screen overflow-hidden flex flex-col">
 
-    <!-- Modal QR Code Remote untuk iPad -->
+        <!-- Modal QR Code Remote untuk iPad -->
     <div id="remote-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl p-6 max-w-sm w-full text-center shadow-2xl border-4 border-pink-300 animate-bounce-slow">
+        <div class="bg-white rounded-3xl p-6 max-w-sm w-full text-center shadow-2xl border-4 border-pink-300">
             <div class="text-4xl mb-2">📱✨</div>
             <h3 class="text-xl font-bold text-pink-600 mb-1">Hubungkan Remote iPhone</h3>
             <p class="text-xs text-gray-600 mb-4 leading-relaxed">Buka kamera <b>iPhone</b> Anda lalu arahkan ke QR Code berikut untuk mengontrol slide tanpa kabel:</p>
             
-            <div class="flex justify-center p-3 bg-pink-50 rounded-2xl border-2 border-dashed border-pink-300 mb-3 shadow-inner">
-                <div id="qrcode"></div>
+            <div class="flex justify-center items-center min-h-[210px] p-3 bg-pink-50 rounded-2xl border-2 border-dashed border-pink-300 mb-3 shadow-inner">
+                <div id="qrcode" class="flex flex-col items-center justify-center">
+                    <span class="text-xs text-pink-500 animate-pulse font-semibold">Membuat QR Code... ⏳</span>
+                </div>
             </div>
             
-            <div id="remote-host-status" class="text-xs font-semibold text-amber-700 bg-amber-100 py-1.5 px-3 rounded-full mb-4 inline-block">
-                🟡 Menunggu koneksi iPhone...
+            <div id="remote-host-status" class="text-xs font-semibold text-amber-700 bg-amber-100 py-1.5 px-3 rounded-full mb-3 inline-block">
+                🟡 Menyiapkan koneksi...
+            </div>
+
+            <div id="remote-url-box" class="hidden mb-3">
+                <a id="remote-link-btn" href="#" target="_blank" class="text-xs text-pink-600 hover:text-pink-700 underline font-semibold break-all">
+                    🔗 Buka link remote langsung
+                </a>
             </div>
             
             <button onclick="closeRemoteModal()" class="w-full bg-gray-100 hover:bg-gray-200 active:bg-gray-300 text-gray-700 font-bold py-2.5 rounded-xl text-sm transition">
                 Tutup Jendela Ini
             </button>
-        </div>
-    </div>
-
-    <!-- Tampilan Layar Remote Khusus untuk iPhone (?remote=...) -->
-    <div id="remote-controller-view" class="fixed inset-0 bg-gradient-to-b from-pink-100 via-white to-pink-100 z-50 p-6 hidden flex flex-col justify-between select-none">
-        <div class="text-center pt-2">
-            <span class="bg-pink-100 text-pink-600 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Remote Kontrol</span>
-            <h1 class="text-2xl font-black text-pink-600 mt-1">Salad Buah TK 🥗</h1>
-            <p class="text-xs text-gray-500">Ibu Dwi Yuniar Sari (Mama Shanum)</p>
-            <div id="remote-client-status" class="mt-2 inline-flex items-center gap-1.5 px-3 py-1 bg-amber-100 text-amber-800 text-xs font-bold rounded-full">
-                🟡 Menghubungkan ke iPad...
-            </div>
-        </div>
-
-        <div class="flex flex-col gap-4 my-auto max-w-sm mx-auto w-full">
-            <div class="grid grid-cols-2 gap-4">
-                <button onclick="sendRemote('prev')" class="bg-gradient-to-b from-sky-400 to-sky-500 active:from-sky-500 active:to-sky-600 text-white font-extrabold py-10 rounded-3xl shadow-xl text-xl flex flex-col items-center justify-center gap-2 active:scale-95 transition transform border-b-4 border-sky-600">
-                    <span class="text-4xl">⬅️</span>
-                    <span>Kembali</span>
-                </button>
-                <button onclick="sendRemote('next')" class="bg-gradient-to-b from-emerald-400 to-emerald-500 active:from-emerald-500 active:to-emerald-600 text-white font-extrabold py-10 rounded-3xl shadow-xl text-xl flex flex-col items-center justify-center gap-2 active:scale-95 transition transform border-b-4 border-emerald-600">
-                    <span class="text-4xl">➡️</span>
-                    <span>Lanjut</span>
-                </button>
-            </div>
-
-            <button onclick="sendRemote('music')" class="w-full bg-gradient-to-r from-yellow-300 to-amber-400 active:from-yellow-400 active:to-amber-500 text-amber-950 font-bold py-4 px-6 rounded-2xl shadow-lg text-base flex items-center justify-center gap-2 active:scale-95 transition transform border-b-4 border-amber-500">
-                🎵 Putar / Matikan Musik
-            </button>
-
-            <button onclick="sendRemote('step')" class="w-full bg-gradient-to-r from-pink-400 to-rose-400 active:from-pink-500 active:to-rose-500 text-white font-bold py-3.5 px-6 rounded-2xl shadow-lg text-sm flex items-center justify-center gap-2 active:scale-95 transition transform border-b-4 border-rose-500">
-                ✨ Lanjut Langkah Memasak
-            </button>
-        </div>
-
-        <div class="text-center pb-2 text-xs text-gray-400">
-            Terhubung otomatis via WebRTC (PeerJS)
-        </div>
-    </div>
-
-            <!-- Pemutar Audio Latar Belakang (BGM Lagu Salad Buah) -->
-    <audio id="bgm-audio" loop preload="auto">
-        <source src="fruit_salad_bgm.mp3" type="audio/mpeg">
-    </audio>
-
-    <!-- Definisi SVG Anggur Hijau 3D agar dapat digunakan di seluruh slide -->
-    <svg width="0" height="0" style="position:absolute; width:0; height:0; overflow:hidden;" aria-hidden="true">
-        <defs>
-            <g id="butir-anggur">
-                <circle cx="0" cy="0" r="13" fill="#65a30d" stroke="#365314" stroke-width="1"/>
-                <circle cx="-1.5" cy="-1.5" r="10.5" fill="#84cc16"/>
-                <circle cx="-3.5" cy="-3.5" r="6.5" fill="#bef264"/>
-                <circle cx="-5" cy="-5" r="2.8" fill="#f7fee7"/>
-            </g>
-            <symbol id="anggur-hijau" viewBox="0 0 100 100">
-                <!-- Tangkai Anggur -->
-                <path d="M18 14 C18 28, 34 36, 54 54" stroke="#65a30d" stroke-width="6" stroke-linecap="round" fill="none"/>
-                <path d="M24 25 L20 42" stroke="#65a30d" stroke-width="4.5" stroke-linecap="round" fill="none"/>
-                <path d="M31 32 L42 30" stroke="#84cc16" stroke-width="4.5" stroke-linecap="round" fill="none"/>
-                <!-- Lapisan Belakang Buah Anggur Hijau -->
-                <use href="#butir-anggur" x="38" y="42"/>
-                <use href="#butir-anggur" x="56" y="36"/>
-                <use href="#butir-anggur" x="67" y="46"/>
-                <use href="#butir-anggur" x="28" y="50"/>
-                <use href="#butir-anggur" x="46" y="78"/>
-                <use href="#butir-anggur" x="65" y="86"/>
-                <!-- Lapisan Tengah Buah Anggur Hijau -->
-                <use href="#butir-anggur" x="20" y="55"/>
-                <use href="#butir-anggur" x="23" y="72"/>
-                <use href="#butir-anggur" x="36" y="75"/>
-                <use href="#butir-anggur" x="64" y="60"/>
-                <use href="#butir-anggur" x="73" y="72"/>
-                <use href="#butir-anggur" x="80" y="84"/>
-                <use href="#butir-anggur" x="54" y="76"/>
-                <!-- Lapisan Depan Buah Anggur Hijau -->
-                <use href="#butir-anggur" x="42" y="31"/>
-                <use href="#butir-anggur" x="58" y="48"/>
-                <use href="#butir-anggur" x="44" y="50"/>
-                <use href="#butir-anggur" x="22" y="62"/>
-                <use href="#butir-anggur" x="38" y="65"/>
-                <use href="#butir-anggur" x="54" y="63"/>
-                <use href="#butir-anggur" x="66" y="76"/>
-            </symbol>
-        </defs>
-    </svg>
-
-    <!-- HEADER -->
-    <div class="w-full bg-pink-500 text-white py-2.5 px-4 md:px-6 flex justify-between items-center shadow-md z-20 shrink-0">
-        <div class="text-lg md:text-2xl font-bold flex items-center gap-2">
-            🥗 <span class="tracking-wide">Dapur Ceria TK</span>
-        </div>
-        <div class="flex items-center gap-2 md:gap-3">
-            <button onclick="openRemoteModal()" class="text-xs md:text-sm font-bold bg-pink-600 hover:bg-pink-700 text-white py-1.5 px-3 rounded-full shadow transition-transform active:scale-95 flex items-center gap-1 border border-pink-300">
-                📱 Remote iPhone
-            </button>
-            <button id="btn-music" onclick="toggleMusic()" class="text-xs md:text-base font-bold bg-yellow-300 hover:bg-yellow-400 text-yellow-900 py-1.5 px-4 rounded-full shadow-md transition-transform active:scale-95 flex items-center gap-1.5">
-                🎵 Putar Musik
-            </button>
-            <span id="audio-status-text" class="text-xs font-semibold text-amber-200 bg-pink-700/60 px-2.5 py-1 rounded-full hidden sm:inline-block">Siap</span>
-            <div class="text-xs md:text-base font-semibold bg-pink-600 py-1.5 px-4 rounded-full shadow-inner hidden sm:block">
-                Oleh: Dwi Yuniar Sari (Mama Shanum)
-            </div>
         </div>
     </div>
 
@@ -1281,7 +1187,7 @@
         // --- 4. Sistem Remote iPhone (WebRTC / PeerJS) ---
         let peerInstance = null;
         let activeRemoteConn = null;
-        let qrCodeGenerated = false;
+        let hostPeerId = null;
 
         const urlParams = new URLSearchParams(window.location.search);
         const remoteTargetId = urlParams.get('remote');
@@ -1301,59 +1207,87 @@
         }
 
         function initRemoteHost() {
-            const hostId = 'salad-tk-' + Math.random().toString(36).substring(2, 8);
-            peerInstance = new Peer(hostId);
+            try {
+                // new Peer() tanpa argumen agar dapat ID unik yang pasti valid dari broker cloud
+                peerInstance = new Peer();
 
-            peerInstance.on('open', (id) => {
-                console.log('Host Peer ID siap:', id);
-                renderHostQR(id);
-            });
-
-            peerInstance.on('connection', (conn) => {
-                activeRemoteConn = conn;
-                conn.on('open', () => {
+                peerInstance.on('open', (id) => {
+                    console.log('Host Peer ID siap:', id);
+                    hostPeerId = id;
+                    renderHostQR(id);
                     const statusEl = document.getElementById('remote-host-status');
                     if (statusEl) {
-                        statusEl.innerText = '🟢 iPhone Terhubung!';
-                        statusEl.className = 'text-xs font-semibold text-emerald-700 bg-emerald-100 py-1.5 px-3 rounded-full mb-4 inline-block';
+                        statusEl.innerText = '🟡 Siap di-scan oleh kamera iPhone';
+                        statusEl.className = 'text-xs font-semibold text-sky-700 bg-sky-100 py-1.5 px-3 rounded-full mb-3 inline-block';
                     }
                 });
 
-                conn.on('data', (data) => {
-                    handleRemoteCommand(data);
+                peerInstance.on('connection', (conn) => {
+                    activeRemoteConn = conn;
+                    conn.on('open', () => {
+                        const statusEl = document.getElementById('remote-host-status');
+                        if (statusEl) {
+                            statusEl.innerText = '🟢 iPhone Terhubung!';
+                            statusEl.className = 'text-xs font-semibold text-emerald-700 bg-emerald-100 py-1.5 px-3 rounded-full mb-3 inline-block';
+                        }
+                    });
+
+                    conn.on('data', (data) => {
+                        handleRemoteCommand(data);
+                    });
+
+                    conn.on('close', () => {
+                        const statusEl = document.getElementById('remote-host-status');
+                        if (statusEl) {
+                            statusEl.innerText = '🟡 Siap di-scan oleh kamera iPhone';
+                            statusEl.className = 'text-xs font-semibold text-sky-700 bg-sky-100 py-1.5 px-3 rounded-full mb-3 inline-block';
+                        }
+                    });
                 });
 
-                conn.on('close', () => {
+                peerInstance.on('error', (err) => {
+                    console.log('PeerJS note:', err);
                     const statusEl = document.getElementById('remote-host-status');
-                    if (statusEl) {
-                        statusEl.innerText = '🟡 Menunggu koneksi iPhone...';
-                        statusEl.className = 'text-xs font-semibold text-amber-700 bg-amber-100 py-1.5 px-3 rounded-full mb-4 inline-block';
+                    if (statusEl && !hostPeerId) {
+                        statusEl.innerText = '⚠️ Menghubungkan ulang ke server remote...';
                     }
                 });
-            });
+            } catch (e) {
+                console.error('initRemoteHost error:', e);
+            }
         }
 
         function renderHostQR(hostId) {
             const qrcodeContainer = document.getElementById('qrcode');
-            if (!qrcodeContainer || qrCodeGenerated) return;
+            if (!qrcodeContainer) return;
 
             const currentUrl = window.location.origin + window.location.pathname;
             const remoteUrl = `${currentUrl}?remote=${hostId}`;
 
-            new QRCode(qrcodeContainer, {
-                text: remoteUrl,
-                width: 160,
-                height: 160,
-                colorDark: "#db2777",
-                colorLight: "#ffffff",
-                correctLevel: QRCode.CorrectLevel.M
-            });
-            qrCodeGenerated = true;
+            // Gambar QR Code langsung dari CDN API: 100% tampil tanpa bergantung pada canvas di hidden modal
+            qrcodeContainer.innerHTML = `
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&color=db2777&data=${encodeURIComponent(remoteUrl)}" 
+                     alt="QR Code Remote" 
+                     class="w-48 h-48 rounded-xl shadow-sm border border-pink-200 bg-white p-2"
+                     loading="eager" />
+            `;
+
+            const urlBox = document.getElementById('remote-url-box');
+            const linkBtn = document.getElementById('remote-link-btn');
+            if (urlBox && linkBtn) {
+                linkBtn.href = remoteUrl;
+                urlBox.classList.remove('hidden');
+            }
         }
 
         function openRemoteModal() {
             const modal = document.getElementById('remote-modal');
             if (modal) modal.classList.remove('hidden');
+            if (hostPeerId) {
+                renderHostQR(hostPeerId);
+            } else if (!peerInstance) {
+                initRemoteHost();
+            }
         }
 
         function closeRemoteModal() {
@@ -1421,6 +1355,5 @@
             }
         }
     </script>
-
 </body>
 </html>
