@@ -179,7 +179,7 @@
         <div class="text-center pt-2">
             <span class="bg-pink-100 text-pink-600 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Remote Kontrol</span>
             <h1 class="text-2xl font-black text-pink-600 mt-1">Salad Buah TK 🥗</h1>
-            <p class="text-xs text-gray-500">Ibu Dwi Yuniar Sari (Mama Shanum)</p>
+            <p class="text-xs sm:text-sm md:text-base text-gray-500">Ibu Dwi Yuniar Sari (Mama Shanum)</p>
             <div id="remote-client-status" class="mt-2 inline-flex items-center gap-1.5 px-3 py-1 bg-amber-100 text-amber-800 text-xs font-bold rounded-full">
                 🟡 Menghubungkan ke iPad...
             </div>
@@ -280,7 +280,7 @@
     <div class="flex-grow relative overflow-hidden bg-gradient-to-b from-amber-50 via-pink-50 to-sky-100">
 
         <!-- SLIDE 0: Kover Depan -->
-        <div id="slide-0" class="slide active items-center justify-center text-center p-6 overflow-y-auto">
+        <div id="slide-0" class="slide active items-center justify-center text-center p-4 md:p-8 overflow-y-auto">
             <div class="bg-white/80 backdrop-blur-sm p-8 md:p-10 rounded-3xl shadow-xl border-4 border-pink-200 max-w-3xl w-full flex flex-col items-center">
                 <div class="text-6xl md:text-8xl mb-4 animate-bounce-slow flex gap-3 items-center justify-center flex-wrap">
                     <span>🥭</span><span>🍊</span><span>🍈</span>
@@ -307,30 +307,31 @@
         </div>
 
         <!-- SLIDE 1: Alat-alat (7 Alat Tanpa Perasan Jeruk) -->
-        <div id="slide-1" class="slide items-center justify-start pt-4 md:pt-8 px-4 md:px-6 overflow-y-auto pb-6">
-            <h2 class="text-2xl md:text-4xl font-bold text-sky-600 mb-2 bg-white px-6 py-2 rounded-full shadow-md border-2 border-sky-200">
-                1. Alat yang Dibutuhkan 🛠️
-            </h2>
-            <p class="text-gray-600 text-sm md:text-lg mb-4 font-medium text-center">Klik pada gambar alat untuk melihat namanya berbunyi!</p>
-            
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 md:gap-5 max-w-5xl w-full">
+        <div id="slide-1" class="slide items-center justify-center p-3 md:p-6 lg:p-8 overflow-y-auto">
+            <div class="w-full max-w-5xl lg:max-w-6xl flex flex-col items-center justify-center my-auto py-2">
+                <h2 class="text-2xl md:text-4xl lg:text-5xl font-bold text-sky-600 mb-2 bg-white px-6 md:px-8 py-2 md:py-3 rounded-full shadow-md border-2 border-sky-200">
+                    1. Alat yang Dibutuhkan 🛠️
+                </h2>
+                <p class="text-gray-600 text-sm md:text-xl mb-4 md:mb-6 font-medium text-center">Klik pada gambar alat untuk melihat namanya berbunyi!</p>
+                
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 md:gap-6 w-full mb-3 sm:mb-4 md:mb-6">
                 
                 <!-- 1. Baskom -->
-                <div onclick="popCard(this)" class="bg-white p-3 md:p-4 rounded-3xl shadow-md border-b-4 border-sky-300 text-center cursor-pointer transform transition hover:scale-105 flex flex-col items-center justify-center">
-                    <svg class="w-20 h-20 md:w-24 md:h-24 mb-2" viewBox="0 0 120 100">
+                <div onclick="popCard(this)" class="bg-white p-3.5 sm:p-5 md:p-6 rounded-3xl shadow-md border-b-4 border-sky-300 text-center cursor-pointer transform transition hover:scale-105 flex flex-col items-center justify-center">
+                    <svg class="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 mb-2 md:mb-3" viewBox="0 0 120 100">
                         <ellipse cx="60" cy="32" rx="48" ry="14" fill="#38bdf8" stroke="#0284c7" stroke-width="4"/>
                         <ellipse cx="60" cy="32" rx="40" ry="9" fill="#bae6fd"/>
                         <path d="M12 32 C12 78, 35 88, 60 88 C85 88, 108 78, 108 32 Z" fill="#0ea5e9" stroke="#0284c7" stroke-width="4"/>
                         <ellipse cx="60" cy="32" rx="48" ry="12" fill="none" stroke="#7dd3fc" stroke-width="4"/>
                         <path d="M28 50 Q40 70 65 72" stroke="#bae6fd" stroke-width="4" stroke-linecap="round" fill="none"/>
                     </svg>
-                    <div class="font-bold text-base md:text-lg text-gray-800">1. Baskom</div>
-                    <div class="text-xs text-gray-500">Wadah mencampur</div>
+                    <div class="font-bold text-base sm:text-lg md:text-xl lg:text-2xl text-gray-800">1. Baskom</div>
+                    <div class="text-xs sm:text-sm md:text-base text-gray-500">Wadah mencampur</div>
                 </div>
 
                 <!-- 2. Pisau -->
-                <div onclick="popCard(this)" class="bg-white p-3 md:p-4 rounded-3xl shadow-md border-b-4 border-rose-300 text-center cursor-pointer transform transition hover:scale-105 flex flex-col items-center justify-center">
-                    <svg class="w-20 h-20 md:w-24 md:h-24 mb-2" viewBox="0 0 120 100">
+                <div onclick="popCard(this)" class="bg-white p-3.5 sm:p-5 md:p-6 rounded-3xl shadow-md border-b-4 border-rose-300 text-center cursor-pointer transform transition hover:scale-105 flex flex-col items-center justify-center">
+                    <svg class="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 mb-2 md:mb-3" viewBox="0 0 120 100">
                         <g transform="rotate(-25 60 50)">
                             <path d="M15 45 L75 45 C75 45, 72 68, 15 62 Z" fill="#e2e8f0" stroke="#64748b" stroke-width="3.5" stroke-linejoin="round"/>
                             <path d="M18 59 C45 62, 68 52, 72 47" stroke="#ffffff" stroke-width="2.5" fill="none"/>
@@ -339,86 +340,91 @@
                             <circle cx="96" cy="49" r="2.5" fill="#fecdd3"/>
                         </g>
                     </svg>
-                    <div class="font-bold text-base md:text-lg text-gray-800">2. Pisau</div>
-                    <div class="text-xs text-rose-500 font-semibold">Hati-hati tajam!</div>
+                    <div class="font-bold text-base sm:text-lg md:text-xl lg:text-2xl text-gray-800">2. Pisau</div>
+                    <div class="text-xs sm:text-sm md:text-base text-rose-500 font-semibold">Hati-hati tajam!</div>
                 </div>
 
                 <!-- 3. Gelas Saji -->
-                <div onclick="popCard(this)" class="bg-white p-3 md:p-4 rounded-3xl shadow-md border-b-4 border-cyan-300 text-center cursor-pointer transform transition hover:scale-105 flex flex-col items-center justify-center">
-                    <svg class="w-20 h-20 md:w-24 md:h-24 mb-2" viewBox="0 0 120 100">
+                <div onclick="popCard(this)" class="bg-white p-3.5 sm:p-5 md:p-6 rounded-3xl shadow-md border-b-4 border-cyan-300 text-center cursor-pointer transform transition hover:scale-105 flex flex-col items-center justify-center">
+                    <svg class="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 mb-2 md:mb-3" viewBox="0 0 120 100">
                         <path d="M32 18 L40 82 C41 88, 79 88, 80 82 L88 18 Z" fill="#e0f2fe" fill-opacity="0.7" stroke="#0284c7" stroke-width="4" stroke-linejoin="round"/>
                         <path d="M39 76 L40 83 C41 88, 79 88, 80 83 L81 76 Z" fill="#bae6fd" stroke="#0284c7" stroke-width="3"/>
                         <ellipse cx="60" cy="18" rx="28" ry="6" fill="#f0f9ff" stroke="#0284c7" stroke-width="4"/>
                         <path d="M40 28 L44 68" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/>
                         <path d="M48 34 L50 55" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>
                     </svg>
-                    <div class="font-bold text-base md:text-lg text-gray-800">3. Gelas</div>
-                    <div class="text-xs text-gray-500">Wadah saji salad</div>
+                    <div class="font-bold text-base sm:text-lg md:text-xl lg:text-2xl text-gray-800">3. Gelas</div>
+                    <div class="text-xs sm:text-sm md:text-base text-gray-500">Wadah saji salad</div>
                 </div>
 
                 <!-- 4. Piring -->
-                <div onclick="popCard(this)" class="bg-white p-3 md:p-4 rounded-3xl shadow-md border-b-4 border-amber-400 text-center cursor-pointer transform transition hover:scale-105 flex flex-col items-center justify-center">
-                    <svg class="w-20 h-20 md:w-24 md:h-24 mb-2" viewBox="0 0 120 100">
+                <div onclick="popCard(this)" class="bg-white p-3.5 sm:p-5 md:p-6 rounded-3xl shadow-md border-b-4 border-amber-400 text-center cursor-pointer transform transition hover:scale-105 flex flex-col items-center justify-center">
+                    <svg class="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 mb-2 md:mb-3" viewBox="0 0 120 100">
                         <ellipse cx="60" cy="58" rx="46" ry="26" fill="#cbd5e1"/>
                         <ellipse cx="60" cy="52" rx="48" ry="28" fill="#f8fafc" stroke="#0284c7" stroke-width="4"/>
                         <ellipse cx="60" cy="52" rx="42" ry="23" fill="none" stroke="#38bdf8" stroke-width="2" stroke-dasharray="6 4"/>
                         <ellipse cx="60" cy="53" rx="32" ry="17" fill="#e0f2fe" stroke="#7dd3fc" stroke-width="3"/>
                         <path d="M36 46 Q48 39 64 41" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" fill="none"/>
                     </svg>
-                    <div class="font-bold text-base md:text-lg text-gray-800">4. Piring</div>
-                    <div class="text-xs text-gray-500">Alas & wadah buah</div>
+                    <div class="font-bold text-base sm:text-lg md:text-xl lg:text-2xl text-gray-800">4. Piring</div>
+                    <div class="text-xs sm:text-sm md:text-base text-gray-500">Alas & wadah buah</div>
                 </div>
 
-                <!-- 5. Sendok Makan -->
-                <div onclick="popCard(this)" class="bg-white p-3 md:p-4 rounded-3xl shadow-md border-b-4 border-purple-300 text-center cursor-pointer transform transition hover:scale-105 flex flex-col items-center justify-center">
-                    <svg class="w-20 h-20 md:w-24 md:h-24 mb-2" viewBox="0 0 120 100">
-                        <g transform="rotate(-30 60 50)">
-                            <rect x="52" y="42" width="48" height="10" rx="5" fill="#cbd5e1" stroke="#475569" stroke-width="3.5"/>
-                            <ellipse cx="36" cy="47" rx="22" ry="14" fill="#e2e8f0" stroke="#475569" stroke-width="3.5"/>
-                            <path d="M24 43 Q36 37 48 43" stroke="#ffffff" stroke-width="3" fill="none" stroke-linecap="round"/>
-                        </g>
-                    </svg>
-                    <div class="font-bold text-base md:text-lg text-gray-800">5. Sendok Makan</div>
-                    <div class="text-xs text-gray-500">Mengaduk & makan</div>
                 </div>
 
-                <!-- 6. Sendok Sayur / Centong -->
-                <div onclick="popCard(this)" class="bg-white p-3 md:p-4 rounded-3xl shadow-md border-b-4 border-pink-300 text-center cursor-pointer transform transition hover:scale-105 flex flex-col items-center justify-center">
-                    <svg class="w-20 h-20 md:w-24 md:h-24 mb-2" viewBox="0 0 120 100">
-                        <path d="M62 60 L92 18 C95 14, 102 18, 98 24 L70 65" fill="#f472b6" stroke="#be185d" stroke-width="3.5" stroke-linecap="round"/>
-                        <path d="M20 55 C20 86, 72 86, 72 55 Z" fill="#ec4899" stroke="#be185d" stroke-width="3.5"/>
-                        <ellipse cx="46" cy="55" rx="26" ry="8" fill="#fbcfe8" stroke="#be185d" stroke-width="3.5"/>
-                    </svg>
-                    <div class="font-bold text-base md:text-lg text-gray-800">6. Sendok Sayur</div>
-                    <div class="text-xs text-gray-500">Centong pengambil buah</div>
-                </div>
+                <!-- Baris Kedua: 3 Alat (Ditata Rapi & Seimbang di Tengah) -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 md:gap-6 w-full max-w-4xl">
+                    <!-- 5. Sendok Makan -->
+                    <div onclick="popCard(this)" class="bg-white p-3.5 sm:p-5 md:p-6 rounded-3xl shadow-md border-b-4 border-purple-300 text-center cursor-pointer transform transition hover:scale-105 flex flex-col items-center justify-center">
+                        <svg class="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 mb-2 md:mb-3" viewBox="0 0 120 100">
+                            <g transform="rotate(-30 60 50)">
+                                <rect x="52" y="42" width="48" height="10" rx="5" fill="#cbd5e1" stroke="#475569" stroke-width="3.5"/>
+                                <ellipse cx="36" cy="47" rx="22" ry="14" fill="#e2e8f0" stroke="#475569" stroke-width="3.5"/>
+                                <path d="M24 43 Q36 37 48 43" stroke="#ffffff" stroke-width="3" fill="none" stroke-linecap="round"/>
+                            </g>
+                        </svg>
+                        <div class="font-bold text-base sm:text-lg md:text-xl lg:text-2xl text-gray-800">5. Sendok Makan</div>
+                        <div class="text-xs sm:text-sm md:text-base text-gray-500">Mengaduk & makan</div>
+                    </div>
 
-                <!-- 7. Parutan Keju / Coklat -->
-                <div onclick="popCard(this)" class="bg-white p-3 md:p-4 rounded-3xl shadow-md border-b-4 border-slate-400 text-center cursor-pointer transform transition hover:scale-105 flex flex-col items-center justify-center col-span-2 sm:col-span-2">
-                    <svg class="w-20 h-20 md:w-24 md:h-24 mb-2" viewBox="0 0 120 100">
-                        <path d="M44 24 V14 C44 9, 76 9, 76 14 V24" fill="none" stroke="#ef4444" stroke-width="7" stroke-linecap="round"/>
-                        <polygon points="36,24 84,24 94,86 26,86" fill="#e2e8f0" stroke="#475569" stroke-width="4" stroke-linejoin="round"/>
-                        <g fill="#475569">
-                            <circle cx="48" cy="36" r="3"/><circle cx="60" cy="36" r="3"/><circle cx="72" cy="36" r="3"/>
-                            <circle cx="45" cy="48" r="3"/><circle cx="55" cy="48" r="3"/><circle cx="65" cy="48" r="3"/><circle cx="75" cy="48" r="3"/>
-                            <circle cx="43" cy="60" r="3"/><circle cx="54" cy="60" r="3"/><circle cx="66" cy="60" r="3"/><circle cx="77" cy="60" r="3"/>
-                            <circle cx="40" cy="72" r="3"/><circle cx="52" cy="72" r="3"/><circle cx="64" cy="72" r="3"/><circle cx="76" cy="72" r="3"/>
-                        </g>
-                        <rect x="24" y="83" width="72" height="6" rx="3" fill="#ef4444"/>
-                    </svg>
-                    <div class="font-bold text-base md:text-lg text-gray-800">7. Parutan Keju / Coklat</div>
-                    <div class="text-xs text-gray-500">Alat memarut keju di atas salad</div>
-                </div>
+                    <!-- 6. Sendok Sayur / Centong -->
+                    <div onclick="popCard(this)" class="bg-white p-3.5 sm:p-5 md:p-6 rounded-3xl shadow-md border-b-4 border-pink-300 text-center cursor-pointer transform transition hover:scale-105 flex flex-col items-center justify-center">
+                        <svg class="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 mb-2 md:mb-3" viewBox="0 0 120 100">
+                            <path d="M62 60 L92 18 C95 14, 102 18, 98 24 L70 65" fill="#f472b6" stroke="#be185d" stroke-width="3.5" stroke-linecap="round"/>
+                            <path d="M20 55 C20 86, 72 86, 72 55 Z" fill="#ec4899" stroke="#be185d" stroke-width="3.5"/>
+                            <ellipse cx="46" cy="55" rx="26" ry="8" fill="#fbcfe8" stroke="#be185d" stroke-width="3.5"/>
+                        </svg>
+                        <div class="font-bold text-base sm:text-lg md:text-xl lg:text-2xl text-gray-800">6. Sendok Sayur</div>
+                        <div class="text-xs sm:text-sm md:text-base text-gray-500">Centong pengambil buah</div>
+                    </div>
 
+                    <!-- 7. Parutan Keju / Coklat -->
+                    <div onclick="popCard(this)" class="bg-white p-3.5 sm:p-5 md:p-6 rounded-3xl shadow-md border-b-4 border-slate-400 text-center cursor-pointer transform transition hover:scale-105 flex flex-col items-center justify-center">
+                        <svg class="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 mb-2 md:mb-3" viewBox="0 0 120 100">
+                            <path d="M44 24 V14 C44 9, 76 9, 76 14 V24" fill="none" stroke="#ef4444" stroke-width="7" stroke-linecap="round"/>
+                            <polygon points="36,24 84,24 94,86 26,86" fill="#e2e8f0" stroke="#475569" stroke-width="4" stroke-linejoin="round"/>
+                            <g fill="#475569">
+                                <circle cx="48" cy="36" r="3"/><circle cx="60" cy="36" r="3"/><circle cx="72" cy="36" r="3"/>
+                                <circle cx="45" cy="48" r="3"/><circle cx="55" cy="48" r="3"/><circle cx="65" cy="48" r="3"/><circle cx="75" cy="48" r="3"/>
+                                <circle cx="43" cy="60" r="3"/><circle cx="54" cy="60" r="3"/><circle cx="66" cy="60" r="3"/><circle cx="77" cy="60" r="3"/>
+                                <circle cx="40" cy="72" r="3"/><circle cx="52" cy="72" r="3"/><circle cx="64" cy="72" r="3"/><circle cx="76" cy="72" r="3"/>
+                            </g>
+                            <rect x="24" y="83" width="72" height="6" rx="3" fill="#ef4444"/>
+                        </svg>
+                        <div class="font-bold text-base sm:text-lg md:text-xl lg:text-2xl text-gray-800">7. Parutan Keju</div>
+                        <div class="text-xs sm:text-sm md:text-base text-gray-500">Memarut keju / coklat</div>
+                    </div>
+                </div>
             </div>
         </div>
 
         <!-- SLIDE 2: Bahan-bahan (Tanpa Lemon) -->
-        <div id="slide-2" class="slide items-center justify-start pt-4 md:pt-8 px-4 md:px-6 overflow-y-auto pb-6">
-            <h2 class="text-2xl md:text-4xl font-bold text-emerald-600 mb-4 bg-white px-6 py-2 rounded-full shadow-md border-2 border-emerald-200">
-                2. Bahan-bahan Lezat 😋
-            </h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 max-w-5xl w-full">
+        <div id="slide-2" class="slide items-center justify-center p-3 md:p-6 lg:p-8 overflow-y-auto">
+            <div class="w-full max-w-5xl lg:max-w-6xl flex flex-col items-center justify-center my-auto py-2">
+                <h2 class="text-2xl md:text-4xl lg:text-5xl font-bold text-emerald-600 mb-4 md:mb-6 bg-white px-6 md:px-8 py-2 md:py-3 rounded-full shadow-md border-2 border-emerald-200">
+                    2. Bahan-bahan Lezat 😋
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-8 w-full">
                 
                 <!-- Kolom Buah & Jeli -->
                 <div class="bg-white p-5 rounded-3xl shadow-lg border-4 border-emerald-200">
@@ -471,28 +477,28 @@
                                 <span class="text-3xl">🫙</span>
                                 <div>
                                     <div class="font-bold text-gray-800">Mayonais</div>
-                                    <div class="text-xs text-gray-500">Gurih & lembut</div>
+                                    <div class="text-xs sm:text-sm md:text-base text-gray-500">Gurih & lembut</div>
                                 </div>
                             </div>
                             <div onclick="popCard(this)" class="bg-sky-50/70 p-3 rounded-2xl flex items-center gap-2.5 border border-sky-200 cursor-pointer hover:scale-105 transition">
                                 <span class="text-3xl">🥛</span>
                                 <div>
                                     <div class="font-bold text-gray-800">Susu Kental Manis</div>
-                                    <div class="text-xs text-gray-500">Manis lezat</div>
+                                    <div class="text-xs sm:text-sm md:text-base text-gray-500">Manis lezat</div>
                                 </div>
                             </div>
                             <div onclick="popCard(this)" class="bg-yellow-50/70 p-3 rounded-2xl flex items-center gap-2.5 border border-yellow-200 cursor-pointer hover:scale-105 transition">
                                 <span class="text-3xl">🍯</span>
                                 <div>
                                     <div class="font-bold text-gray-800">Madu</div>
-                                    <div class="text-xs text-gray-500">Manis alami sehat</div>
+                                    <div class="text-xs sm:text-sm md:text-base text-gray-500">Manis alami sehat</div>
                                 </div>
                             </div>
                             <div onclick="popCard(this)" class="bg-indigo-50/70 p-3 rounded-2xl flex items-center gap-2.5 border border-indigo-200 cursor-pointer hover:scale-105 transition">
                                 <span class="text-3xl">🥣</span>
                                 <div>
                                     <div class="font-bold text-gray-800">Yoghurt Plain</div>
-                                    <div class="text-xs text-gray-500">Segar & sehat</div>
+                                    <div class="text-xs sm:text-sm md:text-base text-gray-500">Segar & sehat</div>
                                 </div>
                             </div>
                             <div onclick="popCard(this)" class="bg-yellow-100 p-3 rounded-2xl flex items-center justify-center gap-3 border-2 border-yellow-400 cursor-pointer hover:scale-105 transition col-span-2">
@@ -506,13 +512,14 @@
                     </div>
                 </div>
 
+                </div>
             </div>
         </div>
 
         <!-- SLIDE 3: PANGGUNG ANIMASI 10 LANGKAH MEMASAK -->
-        <div id="slide-3" class="slide items-center justify-start pt-2 md:pt-4 px-2 md:px-6 overflow-y-auto pb-4">
-            
-            <div class="w-full max-w-4xl bg-white rounded-3xl shadow-2xl border-4 border-purple-300 overflow-hidden flex flex-col">
+        <div id="slide-3" class="slide items-center justify-center p-2 md:p-6 overflow-y-auto">
+            <div class="w-full max-w-4xl lg:max-w-5xl flex flex-col items-center justify-center my-auto py-2">
+                <div class="w-full bg-white rounded-3xl shadow-2xl border-4 border-purple-300 overflow-hidden flex flex-col">
                 
                 <!-- Bar Langkah 1 - 10 (Bisa Diklik Langsung) -->
                 <div class="bg-purple-600 text-white px-3 py-2 flex flex-wrap items-center justify-between gap-2">
@@ -544,7 +551,7 @@
                 </div>
 
                 <!-- LAYAR DAPUR VISUAL -->
-                <div id="animation-stage" class="relative w-full h-64 sm:h-72 md:h-80 bg-gradient-to-b from-sky-100 via-sky-50 to-amber-100 overflow-hidden flex items-center justify-center">
+                <div id="animation-stage" class="relative w-full h-72 sm:h-80 md:h-96 lg:h-[420px] bg-gradient-to-b from-sky-100 via-sky-50 to-amber-100 overflow-hidden flex items-center justify-center">
                     
                     <!-- Dekorasi Dinding Dapur & Meja Kayu -->
                     <div class="absolute top-3 left-4 opacity-40 text-3xl hidden sm:block">🖼️ 🪴</div>
@@ -575,6 +582,7 @@
                     </button>
                 </div>
 
+                </div>
             </div>
         </div>
 
