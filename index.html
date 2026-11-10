@@ -10,6 +10,8 @@
     
     <!-- Tone.js untuk Musik & Efek Suara -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+    <!-- Paho MQTT WebSocket Client untuk Remote Real-Time -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js"></script>
     
     <!-- Google Fonts: Fredoka untuk kesan ceria anak-anak -->
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -153,12 +155,18 @@
             <h3 class="text-xl font-bold text-pink-600 mb-1">Hubungkan Remote iPhone</h3>
             <p class="text-xs text-gray-600 mb-4 leading-relaxed">Buka kamera <b>iPhone</b> Anda lalu arahkan ke QR Code berikut untuk mengontrol slide tanpa kabel:</p>
             
-            <div class="flex justify-center p-3 bg-pink-50 rounded-2xl border-2 border-dashed border-pink-300 mb-3 shadow-inner">
-                <div id="qrcode"></div>
+            <div class="flex flex-col items-center justify-center p-3 bg-pink-50 rounded-2xl border-2 border-dashed border-pink-300 mb-3 shadow-inner">
+                <div id="qrcode-container" class="flex flex-col items-center justify-center min-h-[200px]"></div>
             </div>
             
-            <div id="remote-host-status" class="text-xs font-semibold text-amber-700 bg-amber-100 py-1.5 px-3 rounded-full mb-4 inline-block">
-                🟡 Menunggu koneksi iPhone...
+            <div id="remote-host-status" class="text-xs font-semibold text-sky-700 bg-sky-100 py-1.5 px-3 rounded-full mb-3 inline-block">
+                🟡 Menyiapkan QR Code...
+            </div>
+
+            <div class="mb-3">
+                <a id="remote-link-btn" href="#" target="_blank" class="text-xs text-pink-600 hover:text-pink-700 underline font-semibold break-all">
+                    🔗 Buka link remote langsung
+                </a>
             </div>
             
             <button onclick="closeRemoteModal()" class="w-full bg-gray-100 hover:bg-gray-200 active:bg-gray-300 text-gray-700 font-bold py-2.5 rounded-xl text-sm transition">
@@ -1278,107 +1286,162 @@
 
         updateUI();
 
-        // --- 4. Sistem Remote iPhone (WebRTC / PeerJS) ---
-        let peerInstance = null;
-        let activeRemoteConn = null;
-        let hostPeerId = null;
-
+        // --- 4. Sistem Remote iPhone (MQTT Real-Time over WebSocket) ---
+        let mqttClient = null;
         const urlParams = new URLSearchParams(window.location.search);
         const remoteTargetId = urlParams.get('remote');
 
-        // Jika halaman dibuka dengan parameter ?remote=ID (di iPhone)
+        // Buat ID Ruangan unik untuk iPad
+        const myRoomId = 'sb-' + Math.floor(100000 + Math.random() * 900000);
+        const currentBaseUrl = window.location.origin + window.location.pathname;
+        const myRemoteUrl = `${currentBaseUrl}?remote=${myRoomId}`;
+
+        // Render QR Code LANGSUNG TANPA MENUNGGU KONEKSI
+        function renderInstantQR() {
+            const container = document.getElementById('qrcode-container');
+            const linkBtn = document.getElementById('remote-link-btn');
+            if (container) {
+                container.innerHTML = `
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&color=db2777&data=${encodeURIComponent(myRemoteUrl)}" 
+                         alt="QR Code Remote" 
+                         class="w-48 h-48 rounded-xl shadow-sm border border-pink-200 bg-white p-2 mx-auto block"
+                         loading="eager" />
+                `;
+            }
+            if (linkBtn) {
+                linkBtn.href = myRemoteUrl;
+            }
+        }
+
         if (remoteTargetId) {
+            // Tampilan di iPhone
             document.addEventListener("DOMContentLoaded", () => {
                 const remoteView = document.getElementById('remote-controller-view');
                 if (remoteView) remoteView.classList.remove('hidden');
                 initRemoteClient(remoteTargetId);
             });
         } else {
-            // Halaman presentasi (di iPad / Komputer)
+            // Tampilan di iPad
             document.addEventListener("DOMContentLoaded", () => {
+                renderInstantQR();
                 initRemoteHost();
             });
         }
 
-        function initRemoteHost() {
-            try {
-                // new Peer() tanpa ID kustom agar mendapatkan UUID unik yang resmi dari cloud broker
-                peerInstance = new Peer();
-
-                peerInstance.on('open', (id) => {
-                    console.log('Host Peer ID siap:', id);
-                    hostPeerId = id;
-                    renderHostQR(id);
-                    const statusEl = document.getElementById('remote-host-status');
-                    if (statusEl) {
-                        statusEl.innerText = '🟡 Siap di-scan oleh kamera iPhone';
-                        statusEl.className = 'text-xs font-semibold text-sky-700 bg-sky-100 py-1.5 px-3 rounded-full mb-4 inline-block';
-                    }
-                });
-
-                peerInstance.on('connection', (conn) => {
-                    activeRemoteConn = conn;
-                    conn.on('open', () => {
-                        const statusEl = document.getElementById('remote-host-status');
-                        if (statusEl) {
-                            statusEl.innerText = '🟢 iPhone Terhubung!';
-                            statusEl.className = 'text-xs font-semibold text-emerald-700 bg-emerald-100 py-1.5 px-3 rounded-full mb-4 inline-block';
-                        }
-                    });
-
-                    conn.on('data', (data) => {
-                        handleRemoteCommand(data);
-                    });
-
-                    conn.on('close', () => {
-                        const statusEl = document.getElementById('remote-host-status');
-                        if (statusEl) {
-                            statusEl.innerText = '🟡 Siap di-scan oleh kamera iPhone';
-                            statusEl.className = 'text-xs font-semibold text-sky-700 bg-sky-100 py-1.5 px-3 rounded-full mb-4 inline-block';
-                        }
-                    });
-                });
-
-                peerInstance.on('error', (err) => {
-                    console.log('PeerJS error:', err);
-                });
-            } catch (err) {
-                console.error('Peer init error:', err);
-            }
-        }
-
-        function renderHostQR(hostId) {
-            const qrcodeContainer = document.getElementById('qrcode');
-            if (!qrcodeContainer) return;
-
-            const currentUrl = window.location.origin + window.location.pathname;
-            const remoteUrl = `${currentUrl}?remote=${hostId}`;
-
-            // Gambar QR Code langsung via API gambar: 100% muncul, tajam, dan tidak bergantung canvas modal
-            qrcodeContainer.innerHTML = `
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&color=db2777&data=${encodeURIComponent(remoteUrl)}" 
-                     alt="QR Code Remote" 
-                     class="w-48 h-48 rounded-xl shadow-sm border border-pink-200 bg-white p-2 mx-auto block"
-                     loading="eager" />
-                <div class="mt-2 text-center">
-                    <a href="${remoteUrl}" target="_blank" class="text-xs text-pink-600 hover:text-pink-700 underline font-semibold break-all">
-                        🔗 Buka link remote langsung
-                    </a>
-                </div>
-            `;
-        }
-
         function openRemoteModal() {
             const modal = document.getElementById('remote-modal');
-            if (modal) modal.classList.remove('hidden');
-            if (hostPeerId) {
-                renderHostQR(hostPeerId);
+            if (modal) {
+                renderInstantQR();
+                modal.classList.remove('hidden');
             }
         }
 
         function closeRemoteModal() {
             const modal = document.getElementById('remote-modal');
             if (modal) modal.classList.add('hidden');
+        }
+
+        // Koneksi iPad ke broker MQTT HiveMQ
+        function initRemoteHost() {
+            try {
+                const clientId = "ipad_" + Math.random().toString(36).substring(2, 8);
+                mqttClient = new Paho.MQTT.Client("broker.hivemq.com", 8884, "/mqtt", clientId);
+
+                mqttClient.onConnectionLost = (responseObject) => {
+                    const statusEl = document.getElementById('remote-host-status');
+                    if (statusEl) {
+                        statusEl.innerText = "🟡 Menghubungkan ulang...";
+                        statusEl.className = "text-xs font-semibold text-amber-700 bg-amber-100 py-1.5 px-3 rounded-full mb-3 inline-block";
+                    }
+                    setTimeout(initRemoteHost, 3000);
+                };
+
+                mqttClient.onMessageArrived = (message) => {
+                    try {
+                        const data = JSON.parse(message.payloadString);
+                        if (data.type === 'hello') {
+                            const statusEl = document.getElementById('remote-host-status');
+                            if (statusEl) {
+                                statusEl.innerText = "🟢 iPhone Terhubung!";
+                                statusEl.className = "text-xs font-semibold text-emerald-700 bg-emerald-100 py-1.5 px-3 rounded-full mb-3 inline-block";
+                            }
+                        } else {
+                            handleRemoteCommand(data);
+                        }
+                    } catch (e) {
+                        console.error(e);
+                    }
+                };
+
+                mqttClient.connect({
+                    useSSL: true,
+                    timeout: 8,
+                    onSuccess: () => {
+                        console.log("iPad MQTT Connected to HiveMQ!");
+                        mqttClient.subscribe("salad_buah_tk/" + myRoomId);
+                        const statusEl = document.getElementById('remote-host-status');
+                        if (statusEl) {
+                            statusEl.innerText = "🟡 Siap di-scan oleh kamera iPhone";
+                            statusEl.className = "text-xs font-semibold text-sky-700 bg-sky-100 py-1.5 px-3 rounded-full mb-3 inline-block";
+                        }
+                    },
+                    onFailure: (err) => {
+                        console.error("Host connection failed:", err);
+                        setTimeout(initRemoteHost, 3000);
+                    }
+                });
+            } catch (err) {
+                console.error("MQTT Host error:", err);
+            }
+        }
+
+        // Koneksi iPhone ke broker MQTT HiveMQ
+        function initRemoteClient(targetRoom) {
+            const statusEl = document.getElementById('remote-client-status');
+            try {
+                const clientId = "iphone_" + Math.random().toString(36).substring(2, 8);
+                mqttClient = new Paho.MQTT.Client("broker.hivemq.com", 8884, "/mqtt", clientId);
+
+                mqttClient.onConnectionLost = () => {
+                    if (statusEl) {
+                        statusEl.innerText = "🔴 Koneksi terputus, menghubungkan ulang...";
+                        statusEl.className = "mt-2 inline-flex items-center gap-1.5 px-3 py-1 bg-rose-100 text-rose-800 text-xs font-bold rounded-full";
+                    }
+                    setTimeout(() => initRemoteClient(targetRoom), 2000);
+                };
+
+                mqttClient.connect({
+                    useSSL: true,
+                    timeout: 8,
+                    onSuccess: () => {
+                        if (statusEl) {
+                            statusEl.innerText = "🟢 Terhubung ke iPad!";
+                            statusEl.className = "mt-2 inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-100 text-emerald-800 text-xs font-bold rounded-full";
+                        }
+                        sendRemote('hello');
+                    },
+                    onFailure: (err) => {
+                        console.error("Client connect failed:", err);
+                        if (statusEl) {
+                            statusEl.innerText = "⚠️ Menghubungkan ulang...";
+                            statusEl.className = "mt-2 inline-flex items-center gap-1.5 px-3 py-1 bg-amber-100 text-amber-800 text-xs font-bold rounded-full";
+                        }
+                        setTimeout(() => initRemoteClient(targetRoom), 3000);
+                    }
+                });
+            } catch (err) {
+                console.error("MQTT Client error:", err);
+            }
+        }
+
+        function sendRemote(action) {
+            if (mqttClient && mqttClient.isConnected()) {
+                const payload = (action === 'hello') ? { type: 'hello' } : { action: action };
+                const message = new Paho.MQTT.Message(JSON.stringify(payload));
+                message.destinationName = "salad_buah_tk/" + remoteTargetId;
+                mqttClient.send(message);
+                if (navigator.vibrate) navigator.vibrate(40);
+            }
         }
 
         function handleRemoteCommand(data) {
@@ -1399,45 +1462,6 @@
                 } else {
                     nextSlide();
                 }
-            }
-        }
-
-        // Logic Remote Client (di iPhone)
-        let clientConn = null;
-        function initRemoteClient(targetId) {
-            const clientPeer = new Peer();
-            const statusEl = document.getElementById('remote-client-status');
-
-            clientPeer.on('open', () => {
-                clientConn = clientPeer.connect(targetId);
-
-                clientConn.on('open', () => {
-                    if (statusEl) {
-                        statusEl.innerText = '🟢 Terhubung ke iPad!';
-                        statusEl.className = 'mt-2 inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-100 text-emerald-800 text-xs font-bold rounded-full';
-                    }
-                });
-
-                clientConn.on('close', () => {
-                    if (statusEl) {
-                        statusEl.innerText = '🔴 Terputus dari iPad';
-                        statusEl.className = 'mt-2 inline-flex items-center gap-1.5 px-3 py-1 bg-rose-100 text-rose-800 text-xs font-bold rounded-full';
-                    }
-                });
-            });
-
-            clientPeer.on('error', (err) => {
-                if (statusEl) {
-                    statusEl.innerText = '⚠️ Gagal terhubung';
-                    statusEl.className = 'mt-2 inline-flex items-center gap-1.5 px-3 py-1 bg-rose-100 text-rose-800 text-xs font-bold rounded-full';
-                }
-            });
-        }
-
-        function sendRemote(action) {
-            if (clientConn && clientConn.open) {
-                clientConn.send({ action: action });
-                if (navigator.vibrate) navigator.vibrate(40);
             }
         }
     </script>
