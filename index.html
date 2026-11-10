@@ -324,7 +324,7 @@
                 <h2 class="text-2xl md:text-4xl lg:text-5xl font-bold text-sky-600 mb-2 bg-white px-6 md:px-8 py-2 md:py-3 rounded-full shadow-md border-2 border-sky-200">
                     1. Alat yang Dibutuhkan 🛠️
                 </h2>
-                <p class="text-gray-600 text-sm md:text-xl mb-4 md:mb-6 font-medium text-center">Klik pada gambar alat untuk melihat namanya berbunyi!</p>
+                <p class="text-gray-600 text-sm md:text-xl mb-4 md:mb-6 font-medium text-center">Klik pada gambar alat untuk mendengar namanya bersuara! 🔊</p>
                 
                 <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 md:gap-6 w-full mb-3 sm:mb-4 md:mb-6">
                 
@@ -797,10 +797,110 @@
             }
         }
 
-        function popCard(el) {
+        // --- 1.2. Kamus Suara Bicara & Toast Interaktif (Speech Synthesis) ---
+        const toolPhrases = {
+            'Baskom': 'Baskom! Wadah mencampur bahan salad',
+            'Pisau': 'Pisau! Hati-hati tajam ya anak-anak',
+            'Gelas': 'Gelas! Wadah saji salad buah',
+            'Piring': 'Piring! Wadah dan alas buah',
+            'Sendok Makan': 'Sendok Makan! Untuk mengaduk dan makan salad',
+            'Sendok Sayur': 'Sendok Sayur atau centong pengambil buah',
+            'Parutan Keju': 'Parutan Keju! Untuk memarut keju lezat',
+            'Mangga': 'Mangga manis dan lezat!',
+            'Jeruk': 'Jeruk segar kaya vitamin C!',
+            'Melon': 'Melon manis dan wangi!',
+            'Buah Naga': 'Buah Naga merah cantik!',
+            'Anggur Hijau': 'Anggur Hijau kress manis!',
+            'Jeli / Agar': 'Jeli kenyal enak!',
+            'Mayonais': 'Mayonais gurih dan lembut!',
+            'Susu Kental Manis': 'Susu kental manis lezat!',
+            'Madu': 'Madu alami manis dan sehat!',
+            'Madu Alami': 'Madu alami manis dan sehat!',
+            'Yoghurt Plain': 'Yoghurt plain segar dan sehat!',
+            'Keju Cheddar': 'Keju cheddar lezat diparut!'
+        };
+
+        let indonesianVoice = null;
+        function loadVoices() {
+            if ('speechSynthesis' in window) {
+                const voices = window.speechSynthesis.getVoices();
+                indonesianVoice = voices.find(v => v.lang && (v.lang.includes('id') || v.lang.includes('ID') || v.name.toLowerCase().includes('indonesia')));
+            }
+        }
+        if ('speechSynthesis' in window) {
+            loadVoices();
+            window.speechSynthesis.onvoiceschanged = loadVoices;
+        }
+
+        function showFloatingSpeechToast(text, x, y) {
+            let toast = document.getElementById('speech-toast');
+            if (!toast) {
+                toast = document.createElement('div');
+                toast.id = 'speech-toast';
+                toast.className = 'fixed z-50 pointer-events-none transition-all duration-300 transform -translate-x-1/2 -translate-y-full opacity-0 bg-slate-900/95 text-white font-black px-5 py-2.5 rounded-2xl shadow-2xl flex items-center gap-2 border-2 border-yellow-300 text-sm md:text-lg';
+                document.body.appendChild(toast);
+            }
+            toast.innerHTML = `<span class="text-2xl animate-bounce">🔊</span> <span class="text-yellow-300">${text}</span>`;
+            toast.style.left = `${Math.max(90, Math.min(window.innerWidth - 90, x))}px`;
+            toast.style.top = `${Math.max(50, y - 12)}px`;
+            toast.classList.remove('opacity-0', 'scale-90');
+            toast.classList.add('opacity-100', 'scale-105');
+
+            clearTimeout(toast.hideTimeout);
+            toast.hideTimeout = setTimeout(() => {
+                toast.classList.remove('opacity-100', 'scale-105');
+                toast.classList.add('opacity-0', 'scale-90');
+            }, 1800);
+        }
+
+        function popCard(el, customSpeech) {
+            // 1. Pastikan Web Audio Tone.js aktif
+            if (!audioInitialized) {
+                initAudio();
+            }
+            if (window.Tone && Tone.context && Tone.context.state !== 'running') {
+                Tone.start().catch(() => {});
+            }
+
+            // 2. Mainkan melodi pop ceria
             playPopSFX();
-            el.classList.add('scale-110');
-            setTimeout(() => el.classList.remove('scale-110'), 250);
+
+            // 3. Animasi visual dan deteksi nama alat/bahan
+            let itemName = '';
+            if (el) {
+                el.classList.add('scale-105', 'ring-4', 'ring-yellow-400');
+                setTimeout(() => el.classList.remove('scale-105', 'ring-4', 'ring-yellow-400'), 300);
+
+                const rect = el.getBoundingClientRect();
+                const x = rect.left + rect.width / 2;
+                const y = rect.top;
+
+                const titleEl = el.querySelector('.font-bold, .font-black');
+                if (titleEl) {
+                    itemName = titleEl.innerText.replace(/^\d+[\.\s]*/, '').trim();
+                }
+
+                const toastText = customSpeech ? customSpeech.split('!')[0] : (itemName || 'Ding! 🔔');
+                showFloatingSpeechToast(toastText, x, y);
+            }
+
+            // 4. Suara Ucapan Asli (Speech Synthesis Bahasa Indonesia)
+            const speechText = customSpeech || (itemName && toolPhrases[itemName]) || itemName;
+            if (speechText && 'speechSynthesis' in window) {
+                try {
+                    window.speechSynthesis.cancel();
+                    const utterance = new SpeechSynthesisUtterance(speechText);
+                    utterance.lang = 'id-ID';
+                    utterance.rate = 0.95;
+                    utterance.pitch = 1.15;
+                    if (indonesianVoice) {
+                        utterance.voice = indonesianVoice;
+                    }
+                    window.speechSynthesis.speak(utterance);
+                } catch (e) {
+                    console.warn('Speech error:', e);
+                }
+            }
         }
 
         // --- 2. Logika Efek Suara (Tone.js SFX) & Kontrol Musik ---
@@ -860,9 +960,18 @@
         }
 
         function playPopSFX() {
-            if (!audioInitialized) return;
+            if (!audioInitialized) {
+                initAudio();
+            }
+            if (window.Tone && Tone.context && Tone.context.state !== 'running') {
+                Tone.start().catch(() => {});
+            }
             try {
-                sfxSynth.triggerAttackRelease("G5", "32n", getSafeSfxTime());
+                if (sfxSynth) {
+                    const now = getSafeSfxTime();
+                    sfxSynth.triggerAttackRelease("E5", "32n", now);
+                    sfxSynth.triggerAttackRelease("A5", "16n", now + 0.08);
+                }
             } catch (e) {}
         }
         function playChopSFX() {
